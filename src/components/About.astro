@@ -1,0 +1,320 @@
+---
+
+---
+
+<section id="about" class="container border-b">
+    <div class="about-grid">
+        <!-- Columna Visual (Izquierda) -->
+        <div class="col-visual border-r">
+            <div class="sticky-content">
+                <div class="font-serif about-title">
+                    <span class="label-profile">Perfil</span>
+                    Lógica <br /> & <span class="italic text-ink opacity-50"
+                        >Magia.</span
+                    >
+                </div>
+
+                <!-- Imagen añadida para romper la simplicidad -->
+                <div class="image-frame">
+                    <div class="frame-deco"></div>
+                    <img
+                        src="https://images.unsplash.com/photo-1497215842964-222b4bef97ed?q=80&w=800&auto=format&fit=crop"
+                        alt="Workspace"
+                        class="profile-img"
+                    />
+                    <div class="caption">
+                        <span>Fig. 04</span>
+                        <span>— Workspace</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna de Contenido (Derecha) -->
+        <div class="col-content">
+            <div class="text-block">
+                <p class="mb-6 leading-relaxed">
+                    <span class="drop-cap">H</span>ola, soy Alex. Mi trabajo
+                    habita en la intersección exacta donde el código estricto se
+                    encuentra con el diseño expresivo. No veo diferencia entre
+                    escribir un componente en React y diseñar su interfaz en
+                    Figma; ambos son actos de arquitectura.
+                </p>
+                <p class="mb-6 leading-relaxed">
+                    Como usuario diario de <strong class="highlight"
+                        >CachyOS</strong
+                    > y Linux, valoro la eficiencia. Traslado esa filosofía a la web:
+                    sitios rápidos, accesibles y brutalmente honestos.
+                </p>
+            </div>
+
+            <!-- Separador Editorial -->
+            <div class="divider">
+                <span class="divider-icon">✽</span>
+            </div>
+
+            <!-- Grid de Datos (Servicios + Stack) -->
+            <div class="data-grid">
+                <!-- Servicios -->
+                <div class="data-col border-r">
+                    <h4 class="data-header">/// Servicios</h4>
+                    <ul class="data-list">
+                        <li>UI/UX Design</li>
+                        <li>Design Systems</li>
+                        <li>Frontend Dev</li>
+                        <li>Creative Direction</li>
+                    </ul>
+                </div>
+
+                <!-- Tech Stack -->
+                <div class="data-col">
+                    <h4 class="data-header">/// Arsenal</h4>
+                    <div class="tech-list">
+                        <span class="tech-item">React</span>
+                        <span class="tech-item highlight-box">Astro</span>
+                        <span class="tech-item">Tailwind</span>
+                        <span class="tech-item">TypeScript</span>
+                        <span class="tech-item figma">Figma</span>
+                        <span class="tech-item">Linux</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cita Final -->
+            <div class="quote-box">
+                <p>"La simplicidad es la máxima sofisticación."</p>
+                <span class="author">— Leonardo da Vinci</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Grid Layout Principal */
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 1024px) {
+        .about-grid {
+            grid-template-columns: 5fr 7fr; /* Más espacio para lo visual */
+        }
+    }
+
+    /* Columna Visual */
+    .col-visual {
+        padding: 3rem 2rem;
+        background-color: var(--color-paper);
+    }
+    @media (min-width: 1024px) {
+        .col-visual {
+            padding: 6rem 4rem;
+        }
+        .sticky-content {
+            position: sticky;
+            top: 6rem;
+        }
+    }
+
+    /* Título */
+    .about-title {
+        font-size: 3.5rem;
+        line-height: 0.9;
+        margin-bottom: 4rem;
+    }
+    @media (min-width: 768px) {
+        .about-title {
+            font-size: 5rem;
+        }
+    }
+
+    .label-profile {
+        font-family: var(--font-mono);
+        color: var(--color-red);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border-bottom: 1px solid var(--color-red);
+        display: block;
+        width: max-content;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.25rem;
+    }
+    .opacity-50 {
+        opacity: 0.5;
+    }
+
+    /* Imagen */
+    .image-frame {
+        position: relative;
+        margin-top: 2rem;
+        border: 1px solid var(--color-ink);
+        padding: 0.5rem;
+        background: var(--color-white);
+    }
+    .frame-deco {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        width: 100%;
+        height: 100%;
+        border: 1px solid var(--color-ink);
+        z-index: 0;
+        pointer-events: none;
+    }
+    .profile-img {
+        width: 100%;
+        height: auto;
+        filter: grayscale(100%);
+        transition: filter 0.5s;
+        position: relative;
+        z-index: 1;
+    }
+    .image-frame:hover .profile-img {
+        filter: grayscale(0%);
+    }
+
+    .caption {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 0.5rem;
+        border-top: 1px solid var(--color-ink);
+        padding-top: 0.5rem;
+    }
+
+    /* Columna Contenido */
+    .col-content {
+        background-color: var(--color-white);
+    }
+
+    .text-block {
+        padding: 3rem 2rem;
+        font-family: var(--font-sans);
+        font-size: 1.125rem;
+        line-height: 1.6;
+        text-align: justify;
+    }
+    @media (min-width: 1024px) {
+        .text-block {
+            padding: 6rem 4rem;
+        }
+    }
+
+    /* Letra Capital */
+    .drop-cap {
+        float: left;
+        font-family: var(--font-serif);
+        font-size: 4rem;
+        font-weight: bold;
+        line-height: 0.8;
+        margin-right: 0.75rem;
+        margin-top: -0.25rem;
+    }
+    .highlight {
+        color: var(--color-white);
+        background: var(--color-red);
+        padding: 0 4px;
+    }
+    .mb-6 {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Separador */
+    .divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-top: 1px solid var(--color-ink);
+        border-bottom: 1px solid var(--color-ink);
+        padding: 1rem 0;
+        background: var(--color-paper);
+    }
+    .divider-icon {
+        font-size: 1.5rem;
+        color: var(--color-red);
+    }
+
+    /* Grid de Datos */
+    .data-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        border-bottom: 1px solid var(--color-ink);
+    }
+    @media (min-width: 768px) {
+        .data-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    .data-col {
+        padding: 2rem;
+    }
+    .data-header {
+        font-family: var(--font-mono);
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        margin-bottom: 1.5rem;
+        color: var(--color-red);
+    }
+
+    .data-list {
+        list-style: none;
+        font-family: var(--font-serif);
+        font-size: 1.25rem;
+        line-height: 1.8;
+    }
+    .data-list li::before {
+        content: "— ";
+        color: var(--color-ink);
+        opacity: 0.3;
+    }
+
+    /* Tech List */
+    .tech-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+    }
+    .tech-item {
+        border: 1px solid var(--color-ink);
+        padding: 0.25rem 0.5rem;
+        transition: 0.3s;
+        cursor: default;
+    }
+    .tech-item:hover {
+        background: var(--color-ink);
+        color: var(--color-white);
+    }
+    .highlight-box {
+        background: var(--color-ink);
+        color: var(--color-white);
+    }
+    .figma {
+        border-color: var(--color-red);
+        color: var(--color-red);
+    }
+
+    /* Quote Box */
+    .quote-box {
+        padding: 4rem 2rem;
+        text-align: center;
+        font-family: var(--font-serif);
+    }
+    .quote-box p {
+        font-size: 2rem;
+        font-style: italic;
+        margin-bottom: 1rem;
+    }
+    .author {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.6;
+    }
+</style>

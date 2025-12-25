@@ -1,0 +1,484 @@
+---
+// components/WorkSection.astro
+// Componente de galería de proyectos con diseño editorial
+
+// Props interface
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+import { projects } from '../data/project';
+
+// Sidebar content
+const sidebarContent = {
+  title: 'Obras',
+  subtitle: 'Selectas',
+  description: 'Una colección curada de interfaces digitales. Cada proyecto está construido sobre los principios de la tipografía suiza y la arquitectura de la información.',
+  status: {
+    label: '/// Estado',
+    text: 'Aceptando Proyectos Q4'
+  }
+};
+
+// Archive card content
+const archiveCard = {
+  figure: 'FIG. 03',
+  title: 'Archivo\nDigital',
+  subtitle: 'Ver todos los proyectos',
+  link: '#'
+};
+---
+
+<!-- ============================================
+     WORK SECTION - Portfolio Gallery
+     ============================================ -->
+<section 
+  id="work" 
+  class:list={['work-section', 'container', 'border-b', className]}
+  aria-labelledby="work-title"
+>
+  <div class="work-grid">
+    
+    <!-- SIDEBAR: Intro & Description -->
+    <aside class="sidebar border-r border-b" aria-label="Información de proyectos">
+      <!-- Decorative corner elements -->
+      <div class="deco-square deco-tl" aria-hidden="true"></div>
+      <div class="deco-square deco-br" aria-hidden="true"></div>
+
+      <div>
+        <h2 id="work-title" class="section-title mb-6">
+          {sidebarContent.title} <br />
+          <span class="text-red italic">{sidebarContent.subtitle}</span>
+        </h2>
+        <p class="description">
+          {sidebarContent.description}
+        </p>
+      </div>
+
+      <!-- Status indicator -->
+      <div class="status-box">
+        <p class="status-label">{sidebarContent.status.label}</p>
+        <p class="status-text">{sidebarContent.status.text}</p>
+      </div>
+    </aside>
+
+    <!-- PROJECT CARDS -->
+    {projects.map((project) => (
+      <article 
+        class="project-card"
+        aria-labelledby={`project-${project.id}-title`}
+      >
+        <!-- Project tag -->
+        <span class={`project-tag ${project.tagStyle}`} aria-hidden="true">
+          {project.figure}
+        </span>
+
+        <!-- Project image container -->
+        <div class="project-img-container">
+          <img
+            src={project.image}
+            alt={project.alt}
+            class="project-img"
+            loading="lazy"
+          />
+
+          <!-- Overlay with project info -->
+          <div class="project-overlay">
+            <div class="overlay-header">
+              <h3 id={`project-${project.id}-title`} class="project-title">
+                {project.title}
+              </h3>
+              <time class="project-year" datetime={project.year}>
+                [{project.year}]
+              </time>
+            </div>
+            <p class="project-desc">{project.description}</p>
+            <a 
+              href={project.link} 
+              class="project-link"
+              aria-label={`Ver caso de estudio de ${project.title}`}
+            >
+              Ver Caso
+            </a>
+          </div>
+        </div>
+      </article>
+    ))}
+
+    <!-- ARCHIVE CARD: View all projects -->
+    <a 
+      href={archiveCard.link} 
+      class="archive-card"
+      aria-label={archiveCard.subtitle}
+    >
+      <span class="project-tag tag-paper" aria-hidden="true">
+        {archiveCard.figure}
+      </span>
+      <h3 class="archive-title">
+        {archiveCard.title.split('\n').map((line, i) => (
+          <Fragment>
+            {line}
+            {i === 0 && <br />}
+          </Fragment>
+        ))}
+      </h3>
+      <p class="archive-subtitle">{archiveCard.subtitle}</p>
+      <div class="arrow-circle" aria-hidden="true">
+        <span>→</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<style>
+  /* ============================================
+     SECTION STRUCTURE
+     ============================================ */
+  .work-section {
+    width: 100%;
+  }
+
+  .border-b {
+    border-bottom: var(--border-width) solid var(--color-ink);
+  }
+
+  .border-r {
+    border-right: var(--border-width) solid var(--color-ink);
+  }
+
+  /* ============================================
+     WORK GRID - Main Layout
+     ============================================ */
+  .work-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 1024px) {
+    .work-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* ============================================
+     SIDEBAR - Info Column
+     ============================================ */
+  .sidebar {
+    padding: 2rem;
+    background-color: var(--color-white);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    gap: 2rem;
+    min-height: 400px;
+  }
+
+  @media (min-width: 768px) {
+    .sidebar {
+      padding: 4rem;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .sidebar {
+      border-right: none;
+    }
+  }
+
+  /* Section title */
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    line-height: 1;
+    font-weight: 400;
+  }
+
+  .mb-6 {
+    margin-bottom: 1.5rem;
+  }
+
+  .text-red {
+    color: var(--color-red);
+  }
+
+  .italic {
+    font-style: italic;
+  }
+
+  /* Decorative corner squares */
+  .deco-square {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    pointer-events: none;
+  }
+
+  .deco-tl {
+    inset: 1rem auto auto 1rem;
+    border: 1px solid var(--color-ink);
+  }
+
+  .deco-br {
+    inset: auto 1rem 1rem auto;
+    background-color: var(--color-ink);
+  }
+
+  /* Description text */
+  .description {
+    font-family: var(--font-sans);
+    color: rgba(18, 18, 18, 0.7);
+    line-height: 1.6;
+    text-align: justify;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+  }
+
+  /* Status box */
+  .status-box {
+    margin-block-start: auto;
+  }
+
+  .status-label {
+    font-family: var(--font-mono);
+    color: var(--color-red);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .status-text {
+    font-family: var(--font-serif);
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  }
+
+  /* ============================================
+     PROJECT CARD - Individual Project
+     ============================================ */
+  .project-card {
+    position: relative;
+    border-bottom: var(--border-width) solid var(--color-ink);
+    overflow: hidden;
+    background-color: var(--color-paper);
+  }
+
+  .project-card:last-of-type {
+    border-bottom: none;
+  }
+
+  @media (min-width: 1024px) {
+    .project-card {
+      border-bottom: none;
+      border-right: var(--border-width) solid var(--color-ink);
+    }
+
+    .project-card:last-of-type {
+      border-right: var(--border-width) solid var(--color-ink);
+    }
+  }
+
+  /* Project figure tag */
+  .project-tag {
+    position: absolute;
+    inset: 0 auto auto 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    z-index: 20;
+    border-right: var(--border-width) solid var(--color-ink);
+    border-bottom: var(--border-width) solid var(--color-ink);
+    letter-spacing: 0.05em;
+  }
+
+  .tag-red {
+    background-color: var(--color-red);
+    color: var(--color-white);
+  }
+
+  .tag-black {
+    background-color: var(--color-ink);
+    color: var(--color-white);
+  }
+
+  .tag-paper {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  /* Project image container */
+  .project-img-container {
+    height: 500px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter 0.7s ease, transform 0.7s ease;
+  }
+
+  .project-card:hover .project-img {
+    filter: grayscale(0%);
+    transform: scale(1.05);
+  }
+
+  /* ============================================
+     PROJECT OVERLAY - Hover Information
+     ============================================ */
+  .project-overlay {
+    position: absolute;
+    inset: auto 0 0 0;
+    width: 100%;
+    background-color: rgba(235, 233, 228, 0.95);
+    border-top: var(--border-width) solid var(--color-ink);
+    padding: 1.5rem;
+    backdrop-filter: blur(4px);
+    transform: translateY(100%);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .project-card:hover .project-overlay {
+    transform: translateY(0);
+  }
+
+  .overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+    gap: 1rem;
+  }
+
+  .project-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.5rem, 2.5vw, 1.8rem);
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .project-year {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .project-desc {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: rgba(18, 18, 18, 0.7);
+    margin-bottom: 1rem;
+  }
+
+  .project-link {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-color: var(--color-red);
+    text-underline-offset: 4px;
+    color: var(--color-ink);
+    transition: color 0.3s ease;
+    letter-spacing: 0.05em;
+  }
+
+  .project-link:hover {
+    color: var(--color-red);
+  }
+
+  /* ============================================
+     ARCHIVE CARD - View All Projects
+     ============================================ */
+  .archive-card {
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+    position: relative;
+    text-decoration: none;
+    min-height: 400px;
+  }
+
+  .archive-card:hover {
+    background-color: var(--color-red);
+  }
+
+  .archive-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    margin-bottom: 1rem;
+    line-height: 1;
+    font-weight: 400;
+    margin: 0 0 1rem 0;
+  }
+
+  .archive-subtitle {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin-bottom: 2rem;
+  }
+
+  .arrow-circle {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    border: 1px solid var(--color-paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  }
+
+  .archive-card:hover .arrow-circle {
+    background-color: var(--color-paper);
+    color: var(--color-red);
+    transform: rotate(45deg);
+  }
+
+  /* ============================================
+     ACCESSIBILITY - Focus & Motion
+     ============================================ */
+  .project-card:focus-within,
+  .archive-card:focus-visible {
+    outline: 2px solid var(--color-red);
+    outline-offset: -2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-img,
+    .project-overlay,
+    .archive-card,
+    .arrow-circle,
+    .project-link {
+      transition: none;
+    }
+  }
+
+  /* ============================================
+     MOBILE ADJUSTMENTS - < 768px
+     ============================================ */
+  @media (max-width: 767px) {
+    .project-img-container {
+      height: 350px;
+    }
+
+    .archive-card {
+      padding: 3rem 1.5rem;
+    }
+  }
+</style>
