@@ -1,0 +1,242 @@
+---
+
+---
+
+<section id="home" class="hero border-b">
+    <div class="hero-line"></div>
+
+    <div class="title-container">
+        <div class="title">
+            <!-- Título con la estructura solicitada y corrección de typo 'Designer' -->
+            <h1>
+                Art <span class="caida">i</span> st
+                <span class="ampersand">&</span>
+                Des <span class="caida">i</span> gner
+            </h1>
+        </div>
+
+        <div class="hero-subtitle">
+            <p class="intersection-tag">Welcome to my Portfolio</p>
+        </div>
+    </div>
+
+    <div class="scroll-indicator">
+        <div class="hidden-mobile">Fig. 01 — Hero Cover</div>
+        <div class="text-red bounce">↓ Scroll to Explore</div>
+        <div class="hidden-mobile">Vol. 25</div>
+    </div>
+</section>
+
+<style>
+    .hero {
+        min-height: 85dvh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-line {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1px;
+        height: 100%;
+        background-color: rgba(18, 18, 18, 0.1);
+        pointer-events: none;
+    }
+
+    /* --- ESTILOS DEL H1 ANIMADO Y RESPONSIVO --- */
+    .title h1 {
+        font-family: var(--font-title);
+        font-size: clamp(2rem, 35vw, 12rem);
+        text-transform: uppercase;
+        color: var(--color-red);
+        width: 100%;
+        height: 100%;
+        letter-spacing: -0.1em;
+        transform: scaleX(1) scaleY(1.5);
+        transform-origin: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    /* Ajustes para Móviles */
+    @media (max-width: 768px) {
+        .hero {
+            min-height: 80dvh;
+        }
+        .title h1 {
+            flex-direction: row; /* Apila verticalmente */
+            gap: 0.5rem;
+            /* Usamos VW puro en móvil para asegurar que llene el ancho sin desbordar */
+            font-size: 23vw;
+            transform: scaleX(1) scaleY(1.2); /* Menos distorsión vertical */
+            line-height: 0;
+            white-space: normal;
+            gap: 0;
+        }
+
+        .ampersand {
+            font-size: 0.6em; /* Reducir visualmente el & en móvil */
+            margin: 0 2vh;
+        }
+        .intersection-tag {
+            font-size: 0.8rem !important;
+        }
+
+        .title span {
+            margin: 0;
+        }
+    }
+
+    .title span {
+        /* Mantiene la escala en los span hijos si es necesario */
+        transform-origin: left;
+    }
+
+    .ampersand {
+        color: var(--color-ink);
+        font-style: normal;
+        margin-left: 3vw;
+        margin-right: 3vw;
+        display: inline-block;
+        animation: become-italic 1.2s ease-out forwards;
+    }
+    @keyframes become-italic {
+        from {
+            transform: skewX(0deg);
+        }
+        to {
+            transform: skewX(-15deg);
+        }
+    }
+
+    /* Animación de la 'i' cayendo */
+    .caida {
+        display: inline-block;
+        opacity: 0;
+        color: var(--color-ink); /* Contraste en negro */
+        animation: caida 1.2s ease-in-out forwards;
+    }
+
+    .caida:nth-of-type(2) {
+        animation-delay: 0.3s;
+    }
+
+    @keyframes caida {
+        0% {
+            opacity: 0;
+            transform: translateY(-150vh);
+        }
+        70% {
+            opacity: 1;
+            transform: translateY(0) scaleY(1.3);
+        }
+        85% {
+            opacity: 1;
+            transform: translateY(-15px) scaleY(1.3);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0) scaleY(1.3);
+        }
+    }
+
+    /* Subtítulos y Decoración */
+    .hero-subtitle {
+        margin-top: 4rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+        z-index: 20;
+    }
+
+    .intersection-tag {
+        font-family: var(--font-mono);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(18, 18, 18, 0.7);
+        background-color: var(--color-paper);
+        padding: 0.45rem 3rem;
+        border: 1px solid rgba(18, 18, 18, 0.2);
+        display: inline-block;
+        backface-visibility: hidden;
+        animation: stamp-entrance 1.2s cubic-bezier(0.2, 0.6, 0.35, 1) forwards;
+    }
+    @keyframes stamp-entrance {
+        0% {
+            opacity: 0;
+            transform: scale(4) rotate(15deg);
+            filter: blur(10px);
+        }
+        20% {
+            opacity: 1;
+            transform: scale(1) rotate(-5deg);
+            filter: blur(0px);
+        }
+        40% {
+            transform: scale(0.95) rotate(-5deg);
+        }
+        60% {
+            transform: scale(1.02) rotate(-5deg);
+        }
+        75% {
+            transform: scale(1) rotate(-5deg);
+        }
+        100% {
+            transform: scale(1) rotate(-15deg);
+        }
+    }
+
+    .scroll-indicator {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding: 1rem;
+        font-family: var(--font-mono);
+        font-size: 0.625rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .bounce {
+        animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-10px);
+        }
+        60% {
+            transform: translateY(-5px);
+        }
+    }
+
+    .hidden-mobile {
+        display: none;
+    }
+    @media (min-width: 768px) {
+        .hidden-mobile {
+            display: block;
+        }
+    }
+</style>

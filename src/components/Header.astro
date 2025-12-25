@@ -1,0 +1,105 @@
+<header class="masthead">
+    <div class="container masthead-inner">
+        <!-- Columna Izquierda -->
+        <div class="masthead-col border-r">
+            <span class="hidden-mobile">Est. 2025</span>
+            <span class="live-dot">● Live</span>
+        </div>
+
+        <!-- Centro -->
+        <div class="masthead-center">
+            <h2>Andre</h2>
+            <span class="text-red"> . </span>
+            <h2>Dev</h2>
+        </div>
+
+        <!-- Columna Derecha -->
+        <div class="masthead-col border-l justify-end">Bucaramanga, COL</div>
+    </div>
+</header>
+
+<style>
+    .masthead {
+        background-color: var(--color-paper);
+        border-bottom: var(--border-width) solid var(--color-ink);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .masthead-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+
+    .masthead-col {
+        padding: 0.75rem 1rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        display: flex;
+        align-items: center;
+        width: 33%;
+    }
+
+    .masthead-center {
+        flex: 1;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-serif);
+        font-weight: bold;
+        font-size: 1.5rem;
+        letter-spacing: -0.05em;
+        text-transform: uppercase;
+    }
+
+    .live-dot {
+        color: var(--color-red);
+        animation: pulse 2s infinite;
+        margin-left: 0.5rem;
+    }
+
+    .justify-end {
+        justify-content: flex-end;
+    }
+    .hidden-mobile {
+        display: none;
+    }
+    @media (max-width: 768px) {
+        .hidden-mobile {
+            display: inline;
+            margin-right: 0.5rem;
+        }
+
+        .masthead-center {
+            font-size: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .masthead-center span {
+            font-size: 3rem;
+            margin-top: -43px;
+            margin-bottom: -14px;
+        }
+
+        .masthead-col {
+            font-size: 0.5rem;
+        }
+    }
+
+    @keyframes pulse {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
+    }
+</style>

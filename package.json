@@ -9,6 +9,11 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@fontsource/archivo": "^5.2.8",
+    "@fontsource/bebas-neue": "^5.2.7",
+    "@fontsource/dm-serif-display": "^5.2.8",
+    "@fontsource/six-caps": "^5.2.8",
+    "@fontsource/space-mono": "^5.2.9",
     "astro": "^5.16.6"
   }
 }

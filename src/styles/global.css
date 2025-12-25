@@ -1,0 +1,92 @@
+/*global styles*/   
+@font-face {
+    font-family: "Ultra Condensed";
+    src: url("../../public/fonts/UltraCondensedSansSerif.ttf");
+}
+
+:root {
+    /* Paleta Editorial */
+    --color-paper: #EBE9E4;
+    --color-ink: #121212;
+    --color-red: #d71e3d;
+    --color-white: #ffffff;
+    
+    /* Tipografía */
+    --font-title: "Ultra Condensed", sans-serif;
+    --font-serif: "DM Serif Display", serif;
+    --font-sans: "Archivo", sans-serif;
+    --font-mono: "Space Mono", monospace;
+
+    /* Estructura */
+    --border-width: 1px;
+    --frame-width: 12px;
+    --frame-width-desktop: 24px;
+}
+
+/* Reset Básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    
+    /* El borde perimetral característico */
+    border: var(--frame-width) solid var(--color-ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    
+    /* Renderizado de fuente optimizado */
+    font-feature-settings: "liga" on, "kern" on;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    
+    /* Patrón de rejilla de fondo */
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, rgba(18, 18, 18, 0.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(18, 18, 18, 0.05) 1px, transparent 1px);
+}
+
+@media (min-width: 768px) {
+    body {
+        border-width: var(--frame-width-desktop);
+    }
+}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+img { display: block; width: 100%; height: auto; }
+
+/* Utilidades Globales */
+.container { max-width: 1600px; margin: 0 auto; width: 100%; }
+
+/* Utilidades de Color */
+.text-red { color: var(--color-red); }
+.text-ink { color: var(--color-ink); }
+.text-paper { color: var(--color-paper); }
+
+/* Utilidades de Fuente */
+.font-serif { font-family: var(--font-serif); }
+.font-mono { font-family: var(--font-mono); }
+.uppercase { text-transform: uppercase; }
+.tracking-widest { letter-spacing: 0.1em; }
+.italic { font-style: italic; }
+
+/* Bordes rápidos */
+.border-b { border-bottom: var(--border-width) solid var(--color-ink); }
+.border-r { border-right: var(--border-width) solid var(--color-ink); }
+.border-l { border-left: var(--border-width) solid var(--color-ink); }
+.border-t { border-top: var(--border-width) solid var(--color-ink); }
+
+/* Selección de texto */
+::selection { background: var(--color-red); color: var(--color-paper); }
