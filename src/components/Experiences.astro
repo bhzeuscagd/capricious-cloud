@@ -1,0 +1,305 @@
+---
+// components/ExperienceSection.astro
+// Componente de sección de experiencia laboral con diseño editorial
+
+const { class: className } = Astro.props;
+
+import { experiences } from '../data/experiences';
+---
+
+<!-- ============================================
+     EXPERIENCE SECTION
+     ============================================ -->
+<section 
+  id="experience" 
+  class:list={['experience-section', 'border-b', 'bg-white', className]}
+  aria-labelledby="experience-title"
+>
+  <!-- Main Grid Container -->
+  <div class="container experience-layout">
+    
+    <!-- LEFT SIDEBAR: Vertical Header -->
+    <header class="experience-header">
+      <h2 id="experience-title" class="vertical-text">
+        Trayectoria <span class="text-red" aria-hidden="true">.log</span>
+      </h2>
+    </header>
+
+    <!-- RIGHT CONTENT: Experience Table -->
+    <div class="bg-paper content-column" role="list" aria-label="Historial laboral">
+      
+      {experiences.map((exp) => (
+        <article 
+          class="exp-row" 
+          role="listitem" 
+          tabindex="0"
+          aria-label={`${exp.isCurrent ? 'Posición actual: ' : ''}${exp.title} en ${exp.company}${exp.isCurrent ? '' : `, ${exp.period}`}`}
+        >
+          <!-- Date Column -->
+        <div class="exp-col font-mono text-xs">
+            <span class="dot" aria-hidden="true"></span>
+            <time datetime={exp.datetime}>{exp.period}</time>
+          </div>
+          
+          <!-- Title Column -->
+          <div class="exp-col font-serif text-xl">
+            <h3>{exp.title}</h3>
+          </div>
+          
+          <!-- Company Column -->
+          <div class="exp-col font-mono uppercase text-xs w-full justify-between">
+            <span>{exp.company}</span>
+            <span class="opacity-50">{exp.location}</span>
+          </div>
+        </article>
+      ))}
+
+    </div>
+  </div>
+</section>
+
+<style>
+
+  /* ============================================
+     EXPERIENCE LAYOUT - Main Grid
+     ============================================ */
+  .experience-section {
+    width: 100%;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 1400px;
+    margin-inline: auto;
+  }
+
+  .experience-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 1024px) {
+    .experience-layout {
+      grid-template-columns: 3fr 9fr;
+    }
+  }
+
+  /* ============================================
+     EXPERIENCE HEADER - Sidebar Column
+     ============================================ */
+  .experience-header {
+    background: var(--color-paper);
+    padding: 2rem;
+    border-right: var(--border-width) solid var(--color-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+  }
+
+  @media (min-width: 1024px) {
+    .experience-header {
+      position: sticky;
+      top: 0;
+      min-height: 500px;
+      max-height: 100vh;
+    }
+  }
+
+  /* Vertical title styling */
+  .vertical-text {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    font-style: italic;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  @media (min-width: 1024px) {
+    .vertical-text {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      text-align: center;
+      font-size: clamp(2rem, 4vh, 3rem);
+    }
+  }
+
+  .text-red {
+    color: var(--color-red);
+  }
+
+  /* ============================================
+     CONTENT COLUMN - Right Side
+     ============================================ */
+  .content-column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ============================================
+     EXPERIENCE ROW - Table Structure
+     ============================================ */
+  .exp-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-bottom: var(--border-width) solid var(--color-ink);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+  }
+
+  @media (min-width: 768px) {
+    .exp-row {
+      grid-template-columns: 2fr 6fr 4fr;
+    }
+  }
+
+  .exp-row:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .exp-row:last-child {
+    border-bottom: none;
+  }
+
+  /* ============================================
+     EXPERIENCE COLUMN - Cell Content
+     ============================================ */
+  .exp-col {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .exp-col {
+      border-right: var(--border-width) solid rgba(18, 18, 18, 0.2);
+    }
+
+    .exp-col:last-child {
+      border-right: none;
+    }
+
+    .exp-row:hover .exp-col {
+      border-right-color: rgba(235, 233, 228, 0.2);
+    }
+  }
+
+  /* ============================================
+     ACTIVE INDICATOR - Red Dot
+     ============================================ */
+  .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--color-red);
+    border-radius: 50%;
+    margin-inline-end: 0.5rem;
+    flex-shrink: 0;
+    opacity: 0;        
+    transform: scale(0);  
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink {
+  0%, 100% {
+    opacity: 1;                                  
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+  }
+  50% {
+    opacity: 0.3;                                
+    box-shadow: 0 0 8px 2px rgba(255, 0, 0, 0.1); 
+  }
+}
+
+ .exp-row:hover .dot {
+  opacity: 1;           
+  transform: scale(1);  
+}
+  
+
+  /* ============================================
+     TYPOGRAPHY UTILITIES
+     ============================================ */
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  .font-serif {
+    font-family: var(--font-serif);
+  }
+
+  .text-xs {
+    font-size: 0.75rem;
+  }
+
+  .text-xl {
+    font-size: 1.5rem;
+  }
+
+  .uppercase {
+    text-transform: uppercase;
+  }
+
+  /* Reset heading styles */
+  h3 {
+    font-size: inherit;
+    font-weight: inherit;
+    font-family: inherit;
+    margin: 0;
+  }
+
+  /* ============================================
+     LAYOUT UTILITIES
+     ============================================ */
+  .justify-between {
+    justify-content: space-between;
+  }
+
+  .w-full {
+    width: 100%;
+  }
+
+  /* ============================================
+     VISUAL UTILITIES
+     ============================================ */
+  .opacity-50 {
+    opacity: 0.5;
+  }
+
+  /* ============================================
+     ACCESSIBILITY - Focus & Motion
+     ============================================ */
+  .exp-row:focus-visible {
+    outline: 2px solid var(--color-red);
+    outline-offset: -2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .exp-row,
+    .dot {
+      transition: none;
+      animation: none;
+    }
+  }
+
+  /* ============================================
+     MOBILE ADJUSTMENTS - < 768px
+     ============================================ */
+  @media (max-width: 767px) {
+    .experience-header {
+      border-right: none;
+      border-bottom: var(--border-width) solid var(--color-ink);
+      min-height: auto;
+      padding: 1.5rem;
+    }
+
+    .exp-col {
+      border-bottom: var(--border-width) solid rgba(18, 18, 18, 0.1);
+    }
+
+    .exp-col:last-child {
+      border-bottom: none;
+    }
+  }
+</style>

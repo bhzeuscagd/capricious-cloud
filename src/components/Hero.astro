@@ -2,34 +2,40 @@
 
 ---
 
-<section id="home" class="hero border-b">
-    <div class="hero-line"></div>
+<section id="home" class="hero border-b" aria-label="Hero section">
+    <div class="hero-line" aria-hidden="true"></div>
 
     <div class="title-container">
         <div class="title">
-            <!-- Título con la estructura solicitada y corrección de typo 'Designer' -->
-            <h1>
-                Art <span class="caida">i</span> st
-                <span class="ampersand">&</span>
-                Des <span class="caida">i</span> gner
+            <h1 aria-label="Artist and Designer">
+                Art <span class="caida" aria-hidden="true">i</span> st
+                <span class="ampersand" aria-hidden="true">&</span>
+                Des <span class="caida" aria-hidden="true">i</span> gner
             </h1>
         </div>
 
         <div class="hero-subtitle">
-            <p class="intersection-tag">Welcome to my Portfolio</p>
+            <p class="intersection-tag" aria-label="Welcome to my Portfolio">
+                Welcome to my Portfolio
+            </p>
         </div>
     </div>
 
-    <div class="scroll-indicator">
-        <div class="hidden-mobile">Fig. 01 — Hero Cover</div>
-        <div class="text-red bounce">↓ Scroll to Explore</div>
-        <div class="hidden-mobile">Vol. 25</div>
-    </div>
+    <nav class="scroll-indicator" aria-label="Page navigation hints">
+        <div class="hidden-mobile" aria-hidden="true">Fig. 01 — Hero Cover</div>
+        <div class="text-red bounce" role="status" aria-live="polite">
+            ↓ Scroll to Explore
+        </div>
+        <div class="hidden-mobile" aria-hidden="true">Vol. 25</div>
+    </nav>
 </section>
 
 <style>
+    /* ============================================
+       HERO SECTION - Main Container
+       ============================================ */
     .hero {
-        min-height: 85dvh;
+        min-height: 80dvh;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -38,6 +44,7 @@
         overflow: hidden;
     }
 
+    /* Vertical divider line */
     .hero-line {
         position: absolute;
         top: 0;
@@ -49,7 +56,9 @@
         pointer-events: none;
     }
 
-    /* --- ESTILOS DEL H1 ANIMADO Y RESPONSIVO --- */
+    /* ============================================
+       TYPOGRAPHY - Animated Hero Title
+       ============================================ */
     .title h1 {
         font-family: var(--font-title);
         font-size: clamp(2rem, 35vw, 12rem);
@@ -66,48 +75,15 @@
         white-space: nowrap;
     }
 
-    /* Ajustes para Móviles */
-    @media (max-width: 768px) {
-        .hero {
-            min-height: 80dvh;
-        }
-        .title h1 {
-            flex-direction: row; /* Apila verticalmente */
-            gap: 0.5rem;
-            /* Usamos VW puro en móvil para asegurar que llene el ancho sin desbordar */
-            font-size: 23vw;
-            transform: scaleX(1) scaleY(1.2); /* Menos distorsión vertical */
-            line-height: 0;
-            white-space: normal;
-            gap: 0;
-        }
-
-        .ampersand {
-            font-size: 0.6em; /* Reducir visualmente el & en móvil */
-            margin: 0 2vh;
-        }
-        .intersection-tag {
-            font-size: 0.8rem !important;
-        }
-
-        .title span {
-            margin: 0;
-        }
-    }
-
-    .title span {
-        /* Mantiene la escala en los span hijos si es necesario */
-        transform-origin: left;
-    }
-
+    /* Ampersand character styling with italic animation */
     .ampersand {
         color: var(--color-ink);
         font-style: normal;
-        margin-left: 3vw;
-        margin-right: 3vw;
+        margin: 0 3vw;
         display: inline-block;
         animation: become-italic 1.2s ease-out forwards;
     }
+
     @keyframes become-italic {
         from {
             transform: skewX(0deg);
@@ -117,14 +93,17 @@
         }
     }
 
-    /* Animación de la 'i' cayendo */
+    /* ============================================
+       ANIMATIONS - Letter Drop Effect
+       ============================================ */
     .caida {
         display: inline-block;
         opacity: 0;
-        color: var(--color-ink); /* Contraste en negro */
+        color: var(--color-ink);
         animation: caida 1.2s ease-in-out forwards;
     }
 
+    /* Stagger second letter drop */
     .caida:nth-of-type(2) {
         animation-delay: 0.3s;
     }
@@ -148,7 +127,9 @@
         }
     }
 
-    /* Subtítulos y Decoración */
+    /* ============================================
+       SUBTITLE - Welcome Tag
+       ============================================ */
     .hero-subtitle {
         margin-top: 4rem;
         display: flex;
@@ -172,6 +153,7 @@
         backface-visibility: hidden;
         animation: stamp-entrance 1.2s cubic-bezier(0.2, 0.6, 0.35, 1) forwards;
     }
+
     @keyframes stamp-entrance {
         0% {
             opacity: 0;
@@ -181,7 +163,7 @@
         20% {
             opacity: 1;
             transform: scale(1) rotate(-5deg);
-            filter: blur(0px);
+            filter: blur(0);
         }
         40% {
             transform: scale(0.95) rotate(-5deg);
@@ -197,6 +179,9 @@
         }
     }
 
+    /* ============================================
+       SCROLL INDICATOR - Bottom Navigation Hint
+       ============================================ */
     .scroll-indicator {
         position: absolute;
         bottom: 0;
@@ -215,6 +200,7 @@
     .bounce {
         animation: bounce 2s infinite;
     }
+
     @keyframes bounce {
         0%,
         20%,
@@ -231,9 +217,37 @@
         }
     }
 
+    /* ============================================
+       RESPONSIVE DESIGN - Mobile Optimizations
+       ============================================ */
+    @media (max-width: 768px) {
+        .hero {
+            min-height: 80dvh;
+        }
+
+        .title h1 {
+            font-size: 23vw;
+            transform: scaleX(1) scaleY(1.2);
+            line-height: 0;
+            white-space: normal;
+            gap: 0;
+        }
+
+        .ampersand {
+            font-size: 0.6em;
+            margin: 0 2vh;
+        }
+
+        .intersection-tag {
+            font-size: 0.8rem !important;
+        }
+    }
+
+    /* Desktop-only elements */
     .hidden-mobile {
         display: none;
     }
+
     @media (min-width: 768px) {
         .hidden-mobile {
             display: block;

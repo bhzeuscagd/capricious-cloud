@@ -1,0 +1,104 @@
+---
+
+---
+
+<nav class="sticky-nav">
+    <div class="container">
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="#work" class="nav-link">
+                    <span class="nav-number">01</span> Proyectos</a
+                >
+            </li>
+            <li class="nav-item">
+                <a href="#experience" class="nav-link">
+                    <span class="nav-number">02</span> Historial</a
+                >
+            </li>
+            <li class="nav-item">
+                <a href="#about" class="nav-link">
+                    <span class="nav-number">03</span> Perfil</a
+                >
+            </li>
+            <li class="nav-item">
+                <a href="#contact" class="nav-link contact">
+                    <span class="nav-number">04</span> Contacto</a
+                >
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<style>
+    .sticky-nav {
+        position: sticky;
+        top: 50px; /* Ajustar según altura del masthead */
+        z-index: 90;
+        background-color: var(--color-paper);
+        border-bottom: var(--border-width) solid var(--color-ink);
+    }
+
+    .nav-list {
+        display: flex;
+        font-family: var(--font-mono);
+        font-size: clamp(0.625rem, 2.5vw, 0.875rem);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+    @media (min-width: 768px) {
+        .nav-list {
+            font-size: 0.875rem;
+        }
+    }
+
+    .nav-item {
+        flex: 1;
+        border-left: var(--border-width) solid var(--color-ink);
+        position: relative;
+    }
+    .nav-item:first-child {
+        border-left: none;
+    }
+
+    .nav-number {
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 0.55rem;
+        font-family: var(--font-mono);
+        color: var(--color-ink);
+        text-align: right;
+        width: 1rem;
+        margin-right: 0.5rem;
+        margin-left: 0.5rem;
+    }
+
+    .nav-link:hover .nav-number {
+        color: var(--color-white);
+    }
+    .contact .nav-number {
+        color: var(--color-white);
+    }
+
+    .nav-link {
+        display: block;
+        padding: clamp(0.5rem, 2vw, 1rem);
+        text-align: center;
+        transition:
+            background-color 0.3s,
+            color 0.3s;
+    }
+    .nav-link:hover {
+        background-color: var(--color-red);
+        color: var(--color-white);
+    }
+
+    .nav-link.contact {
+        background-color: var(--color-ink);
+        color: var(--color-paper);
+    }
+    .nav-link.contact:hover {
+        background-color: var(--color-red);
+        color: var(--color-white);
+    }
+</style>
