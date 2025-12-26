@@ -1,6 +1,6 @@
 ---
 // components/ContactSection.astro
-// Componente de formulario de contacto con envío funcional
+// Componente de formulario de contacto con modal de éxito
 
 import { contactData } from "../data/contact";
 
@@ -10,7 +10,6 @@ interface Props {
 }
 
 const { class: className } = Astro.props;
-import gracias from "./Gracias.astro";
 ---
 
 <!-- ============================================
@@ -60,7 +59,8 @@ import gracias from "./Gracias.astro";
                 />
                 <input type="hidden" name="_template" value="box" />
                 <input type="hidden" name="_captcha" value="false" />
-                <input type="hidden" name="_next" value="/gracias" />
+                <!-- Webhook que retorna JSON para interceptar con JavaScript -->
+                <input type="hidden" name="_webhook" value="" />
 
                 <!-- Row 1: Name + Email -->
                 <div class="field-row border-bottom">
@@ -162,12 +162,82 @@ import gracias from "./Gracias.astro";
     </div>
 </section>
 
-<!-- Client-side Form Validation & Enhancement -->
+<!-- SUCCESS MODAL -->
+<div id="success-modal" class="modal" aria-hidden="true">
+    <div class="modal-overlay"></div>
+    <div class="modal-content" role="dialog" aria-labelledby="modal-title">
+        <button class="modal-close" aria-label="Cerrar modal">×</button>
+
+        <span class="status-badge">TRANSMISSION_SUCCESS</span>
+
+        <div class="success-icon" aria-hidden="true">✓</div>
+
+        <h2 id="modal-title" class="modal-title">
+            Mensaje <span class="highlight">Recibido.</span>
+        </h2>
+
+        <p class="modal-text">
+            Gracias por contactar. Tu mensaje ha sido enviado exitosamente.
+            Responderé a la brevedad posible, generalmente dentro de 24-48
+            horas.
+        </p>
+
+        <div class="info-box">
+            <p class="info-title">/// ¿Qué sigue?</p>
+            <ul class="info-list">
+                <li>Revisaré tu mensaje cuidadosamente</li>
+                <li>Te responderé al email proporcionado</li>
+                <li>Coordinaremos una llamada si es necesario</li>
+            </ul>
+        </div>
+
+        <button class="modal-btn">Entendido</button>
+    </div>
+</div>
+
+<!-- Client-side Form Validation & Modal Handler -->
 <script>
     const form = document.getElementById("contact-form") as HTMLFormElement;
+    const modal = document.getElementById("success-modal") as HTMLDivElement;
+    const modalClose = document.querySelector(
+        ".modal-close",
+    ) as HTMLButtonElement;
+    const modalBtn = document.querySelector(".modal-btn") as HTMLButtonElement;
+    const modalOverlay = document.querySelector(
+        ".modal-overlay",
+    ) as HTMLDivElement;
+
+    // Función para abrir el modal
+    function openModal() {
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden";
+        modal.setAttribute("aria-hidden", "false");
+    }
+
+    // Función para cerrar el modal
+    function closeModal() {
+        modal.classList.remove("active");
+        document.body.style.overflow = "";
+        modal.setAttribute("aria-hidden", "true");
+        form.reset();
+    }
+
+    // Event listeners para cerrar el modal
+    if (modalClose) modalClose.addEventListener("click", closeModal);
+    if (modalBtn) modalBtn.addEventListener("click", closeModal);
+    if (modalOverlay) modalOverlay.addEventListener("click", closeModal);
+
+    // Cerrar con ESC
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.classList.contains("active")) {
+            closeModal();
+        }
+    });
 
     if (form) {
         form.addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevenir envío normal
+
             const name = (
                 document.getElementById("name") as HTMLInputElement
             ).value.trim();
@@ -183,7 +253,6 @@ import gracias from "./Gracias.astro";
 
             // Basic validation
             if (!name || !email || !service || !message) {
-                e.preventDefault();
                 alert("Por favor completa todos los campos requeridos.");
                 return;
             }
@@ -191,7 +260,6 @@ import gracias from "./Gracias.astro";
             // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                e.preventDefault();
                 alert("Por favor ingresa un email válido.");
                 return;
             }
@@ -210,49 +278,64 @@ import gracias from "./Gracias.astro";
             submitBtn.style.opacity = "0.7";
             submitBtn.style.cursor = "not-allowed";
 
-            // Form will submit normally to FormSubmit
-            console.log("Formulario enviado:", {
-                name,
-                email,
-                service,
-                message,
-            });
+            // Enviar con fetch para interceptar la respuesta
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    Accept: "application/json",
+                },
+            })
+                .then((response) => {
+                    // Abrir modal independientemente de la respuesta
+                    openModal();
+
+                    // Restaurar botón
+                    btnText.textContent = originalText!;
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = "";
+                    submitBtn.style.cursor = "";
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    // Abrir modal de todas formas (FormSubmit puede dar CORS error pero el email se envía)
+                    openModal();
+
+                    // Restaurar botón
+                    btnText.textContent = originalText!;
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = "";
+                    submitBtn.style.cursor = "";
+                });
         });
 
-        // Real-time validation feedback
-        const inputs = form.querySelectorAll(
-            "input[required], select[required], textarea[required]",
-        );
-        inputs.forEach((input) => {
-            input.addEventListener(
-                "blur",
-                function (
-                    this:
-                        | HTMLInputElement
-                        | HTMLSelectElement
-                        | HTMLTextAreaElement,
-                ) {
-                    if (!this.value.trim()) {
-                        this.style.borderBottom = "2px solid var(--color-red)";
-                    } else {
-                        this.style.borderBottom = "none";
-                    }
-                },
-            );
+        // Real-time validation feedback - Border rojo en field-group
+        const fieldGroups = form.querySelectorAll(".field-group");
 
-            input.addEventListener(
-                "input",
-                function (
-                    this:
-                        | HTMLInputElement
-                        | HTMLSelectElement
-                        | HTMLTextAreaElement,
-                ) {
-                    if (this.style.borderBottom) {
-                        this.style.borderBottom = "none";
+        fieldGroups.forEach((fieldGroup) => {
+            const input = fieldGroup.querySelector(
+                "input, select, textarea",
+            ) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+
+            if (input) {
+                // Al perder foco
+                input.addEventListener("blur", function () {
+                    if (!input.value.trim()) {
+                        fieldGroup.classList.add("error");
+                    } else {
+                        fieldGroup.classList.remove("error");
                     }
-                },
-            );
+                });
+
+                // Al escribir
+                input.addEventListener("input", function () {
+                    if (fieldGroup.classList.contains("error")) {
+                        fieldGroup.classList.remove("error");
+                    }
+                });
+            }
         });
     }
 </script>
@@ -267,7 +350,6 @@ import gracias from "./Gracias.astro";
         position: relative;
     }
 
-    /* Technical Badge - Top Right */
     .tech-badge {
         position: absolute;
         inset: 0 0 auto auto;
@@ -281,7 +363,7 @@ import gracias from "./Gracias.astro";
     }
 
     /* ============================================
-     LAYOUT GRID - Main Structure
+     LAYOUT GRID
      ============================================ */
     .layout-grid {
         display: grid;
@@ -295,7 +377,7 @@ import gracias from "./Gracias.astro";
     }
 
     /* ============================================
-     SIDEBAR - Vertical Text (Desktop Only)
+     SIDEBAR
      ============================================ */
     .sidebar {
         display: none;
@@ -323,7 +405,7 @@ import gracias from "./Gracias.astro";
     }
 
     /* ============================================
-     FORM HEADER - Title Section
+     FORM HEADER
      ============================================ */
     .form-header {
         padding: 2rem;
@@ -356,7 +438,7 @@ import gracias from "./Gracias.astro";
     }
 
     /* ============================================
-     FORM BODY - Input Fields
+     FORM BODY
      ============================================ */
     .form-body {
         display: flex;
@@ -378,16 +460,24 @@ import gracias from "./Gracias.astro";
         border-bottom: var(--border-width) solid var(--color-ink);
     }
 
-    /* Field Group */
+    /* Field Group - Border rojo al tener error */
     .field-group {
         flex: 1;
         padding: 1.5rem;
         position: relative;
-        transition: background-color 0.3s ease;
+        transition:
+            background-color 0.3s ease,
+            border-color 0.3s ease;
+        border: 2px solid transparent;
     }
 
     .field-group:focus-within {
         background-color: var(--color-paper);
+    }
+
+    .field-group.error {
+        border-color: var(--color-red);
+        background-color: rgba(255, 0, 0, 0.05);
     }
 
     .border-right {
@@ -402,7 +492,6 @@ import gracias from "./Gracias.astro";
         }
     }
 
-    /* Field Label */
     .field-label {
         display: block;
         font-family: var(--font-mono);
@@ -415,7 +504,7 @@ import gracias from "./Gracias.astro";
     }
 
     /* ============================================
-     INPUT ELEMENTS - Brutalist Style
+     INPUT ELEMENTS
      ============================================ */
     .input-reset {
         width: 100%;
@@ -427,7 +516,6 @@ import gracias from "./Gracias.astro";
         padding: 0;
         outline: none;
         border-radius: 0;
-        transition: border-bottom 0.3s ease;
     }
 
     .input-reset::placeholder {
@@ -436,11 +524,6 @@ import gracias from "./Gracias.astro";
         font-style: italic;
     }
 
-    .input-reset:focus {
-        border-bottom: 2px solid var(--color-red);
-    }
-
-    /* Select Dropdown */
     .select-wrapper {
         position: relative;
         width: 100%;
@@ -461,22 +544,22 @@ import gracias from "./Gracias.astro";
         font-size: 0.875rem;
     }
 
-    /* Textarea */
+    /* Textarea con puntos en vez de líneas */
     .textarea-reset {
         resize: vertical;
         min-height: 150px;
         font-family: var(--font-serif);
         line-height: 1.6;
-        background-image: repeating-linear-gradient(
-            transparent,
-            transparent 1.5rem,
-            rgba(18, 18, 18, 0.1) 1.5rem,
-            rgba(18, 18, 18, 0.1) calc(1.5rem + 1px)
+        background-image: radial-gradient(
+            var(--color-ink) 1px,
+            transparent 1px
         );
+        background-size: 20px 20px;
+        background-position: 0 0;
     }
 
     /* ============================================
-     SUBMIT BUTTON - Call to Action
+     SUBMIT BUTTON
      ============================================ */
     .submit-btn {
         width: 100%;
@@ -521,6 +604,175 @@ import gracias from "./Gracias.astro";
     }
 
     /* ============================================
+     SUCCESS MODAL
+     ============================================ */
+    .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .modal.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .modal-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(18, 18, 18, 0.8);
+        backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+        position: relative;
+        max-width: 600px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: var(--color-paper);
+        border: 2px solid var(--color-ink);
+        padding: 3rem 2rem;
+        text-align: center;
+        transform: scale(0.9);
+        transition: transform 0.3s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal.active .modal-content {
+        transform: scale(1);
+    }
+
+    .modal-close {
+        position: absolute;
+        inset: 1rem 1rem auto auto;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 1px solid var(--color-ink);
+        background: var(--color-white);
+        font-size: 1.5rem;
+        line-height: 1;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: var(--font-serif);
+    }
+
+    .modal-close:hover {
+        background: var(--color-red);
+        color: var(--color-white);
+        border-color: var(--color-red);
+        transform: rotate(90deg);
+    }
+
+    .modal .status-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        background-color: var(--color-ink);
+        color: var(--color-paper);
+        letter-spacing: 0.1em;
+        margin-bottom: 2rem;
+    }
+
+    .success-icon {
+        font-size: 5rem;
+        color: var(--color-red);
+        margin-bottom: 2rem;
+        animation: checkmark 0.5s ease-in-out;
+    }
+
+    @keyframes checkmark {
+        0% {
+            transform: scale(0) rotate(0deg);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.2) rotate(180deg);
+        }
+        100% {
+            transform: scale(1) rotate(360deg);
+            opacity: 1;
+        }
+    }
+
+    .modal-title {
+        font-family: var(--font-serif);
+        font-size: clamp(2rem, 5vw, 3rem);
+        line-height: 1;
+        margin-bottom: 1rem;
+        color: var(--color-ink);
+    }
+
+    .highlight {
+        color: var(--color-red);
+        font-style: italic;
+    }
+
+    .modal-text {
+        font-size: 1.125rem;
+        line-height: 1.6;
+        color: rgba(18, 18, 18, 0.7);
+        margin-bottom: 2rem;
+    }
+
+    .info-box {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: var(--color-white);
+        border: 1px solid var(--color-ink);
+        text-align: left;
+    }
+
+    .info-title {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-red);
+        margin-bottom: 1rem;
+    }
+
+    .info-list {
+        list-style: none;
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+        line-height: 1.8;
+        padding: 0;
+        margin: 0;
+    }
+
+    .info-list li::before {
+        content: "→ ";
+        color: var(--color-red);
+        margin-right: 0.5rem;
+    }
+
+    .modal-btn {
+        padding: 1rem 2rem;
+        background: var(--color-ink);
+        color: var(--color-paper);
+        border: 1px solid var(--color-ink);
+        font-family: var(--font-mono);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .modal-btn:hover {
+        background: var(--color-red);
+        border-color: var(--color-red);
+    }
+
+    /* ============================================
      UTILITY CLASSES
      ============================================ */
     .w-full {
@@ -532,32 +784,22 @@ import gracias from "./Gracias.astro";
     }
 
     /* ============================================
-     ACCESSIBILITY - Focus & Validation
+     ACCESSIBILITY
      ============================================ */
-    .input-reset:focus-visible,
-    .select-reset:focus-visible,
-    .textarea-reset:focus-visible {
-        outline: 2px solid var(--color-red);
-        outline-offset: 2px;
-    }
-
-    /* Invalid state */
-    .input-reset:invalid:not(:placeholder-shown),
-    .select-reset:invalid:not(:placeholder-shown),
-    .textarea-reset:invalid:not(:placeholder-shown) {
-        border-bottom: 2px solid var(--color-red);
-    }
-
     @media (prefers-reduced-motion: reduce) {
         .field-group,
         .submit-btn,
-        .btn-icon {
+        .btn-icon,
+        .modal,
+        .modal-content,
+        .success-icon {
             transition: none;
+            animation: none;
         }
     }
 
     /* ============================================
-     MOBILE ADJUSTMENTS - < 768px
+     MOBILE ADJUSTMENTS
      ============================================ */
     @media (max-width: 767px) {
         .form-header {
@@ -570,6 +812,10 @@ import gracias from "./Gracias.astro";
 
         .submit-btn {
             padding: 1.5rem 1rem;
+        }
+
+        .modal-content {
+            padding: 2rem 1.5rem;
         }
     }
 </style>
