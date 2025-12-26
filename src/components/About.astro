@@ -41,7 +41,7 @@ const { class: className, variant = "default" } = Astro.props;
                         {aboutData.title.main}
                         <br />
                         {aboutData.title.conjunction}{" "}
-                        <span class="italic text-ink opacity-50"
+                        <span class="italic text-ink opacity-20"
                             >{aboutData.title.subtitle}</span
                         >
                     </h2>
@@ -219,7 +219,7 @@ const { class: className, variant = "default" } = Astro.props;
     }
 
     .text-ink {
-        color: var(--color-ink);
+        color: var(--color-red);
     }
 
     .opacity-50 {
