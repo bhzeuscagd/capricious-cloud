@@ -1,0 +1,288 @@
+---
+
+---
+
+<footer class="footer-brutalist">
+    <!-- Grid Decorativo de Fondo -->
+    <div class="bg-grid-layer"></div>
+
+    <div class="container-fluid">
+        <!-- Sección Superior: CTA Gigante -->
+        <div class="cta-wrapper border-bottom">
+            <div class="meta-row">
+                <span class="meta-label">/// Estado del Sistema</span>
+                <div class="status-indicator">
+                    <span class="blink-dot"></span>
+                    <span class="status-text">DISPONIBLE Q4</span>
+                </div>
+            </div>
+
+            <a href="mailto:bhzemail@gmail.com" class="giant-link">
+                <span class="link-text">Hablemos</span>
+                <span class="link-arrow">↗</span>
+            </a>
+        </div>
+
+        <!-- Sección Media: Grid de Datos -->
+        <div class="info-grid border-bottom">
+            <!-- Columna 1: Redes -->
+            <div class="info-col border-right">
+                <span class="col-header">[01] Redes</span>
+                <ul class="raw-list">
+                    <li><a href="#" class="raw-link">Instagram -></a></li>
+                    <li><a href="#" class="raw-link">Twitter / X -></a></li>
+                    <li><a href="#" class="raw-link">LinkedIn -></a></li>
+                    <li><a href="#" class="raw-link">GitHub -></a></li>
+                </ul>
+            </div>
+
+            <!-- Columna 2: Legal -->
+            <div class="info-col border-right">
+                <span class="col-header">[02] Legal</span>
+                <ul class="raw-list">
+                    <li>
+                        <a href="#" class="raw-link">Política de Privacidad</a>
+                    </li>
+                    <li><a href="#" class="raw-link">Términos de Uso</a></li>
+                    <li><a href="#" class="raw-link">Licencia MIT</a></li>
+                </ul>
+            </div>
+
+            <!-- Columna 3: Tech Specs -->
+            <div class="info-col">
+                <span class="col-header">[03] Especificaciones</span>
+                <div class="tech-specs">
+                    <p>Build: v.2.4.0</p>
+                    <p>OS: CachyOS / Arch</p>
+                    <p>Font: DM Serif / Mono</p>
+                    <p>Timezone: GMT-5</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Inferior: Copyright & Location -->
+        <div class="footer-bottom">
+            <span class="copyright">© 2025 CAGD</span>
+            <div class="location-badge">
+                BUCARAMANGA, COL
+                <i class="ph ph-map-pin"></i>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    /* Estructura Base */
+    .footer-brutalist {
+        background-color: var(--color-ink);
+        color: var(--color-paper);
+        position: relative;
+        overflow: hidden;
+        border-top: var(--border-width) solid var(--color-ink);
+    }
+
+    .container-fluid {
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+        z-index: 10;
+    }
+
+    /* Fondo Decorativo */
+    .bg-grid-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.1;
+        pointer-events: none;
+        background-size: 40px 40px;
+        background-image:
+            linear-gradient(to right, var(--color-paper) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--color-paper) 1px, transparent 1px);
+    }
+
+    /* Utilidades de Bordes (adaptadas al contexto oscuro) */
+    .border-bottom {
+        border-bottom: 1px solid rgba(235, 233, 228, 0.2);
+    }
+    .border-right {
+        border-right: none;
+    }
+    @media (min-width: 768px) {
+        .border-right {
+            border-right: 1px solid rgba(235, 233, 228, 0.2);
+        }
+    }
+
+    /* --- CTA GIGANTE --- */
+    .cta-wrapper {
+        padding: 3rem 1.5rem;
+    }
+    @media (min-width: 1024px) {
+        .cta-wrapper {
+            padding: 6rem 4rem;
+        }
+    }
+
+    .meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.7;
+    }
+
+    .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 1px solid var(--color-red);
+        padding: 0.25rem 0.75rem;
+        color: var(--color-red);
+    }
+
+    .blink-dot {
+        width: 8px;
+        height: 8px;
+        background-color: var(--color-red);
+        border-radius: 50%;
+        animation: blink 1s infinite;
+    }
+    @keyframes blink {
+        50% {
+            opacity: 0;
+        }
+    }
+
+    .giant-link {
+        display: block;
+        font-family: var(--font-serif);
+        font-size: clamp(4rem, 18vw, 15rem);
+        line-height: 0.8;
+        color: var(--color-paper);
+        text-decoration: none;
+        transition: color 0.3s ease;
+        position: relative;
+    }
+
+    .giant-link:hover {
+        color: transparent;
+        -webkit-text-stroke: 2px var(--color-red);
+    }
+
+    .link-arrow {
+        font-size: 0.3em;
+        vertical-align: top;
+        opacity: 0;
+        transition:
+            opacity 0.3s ease,
+            transform 0.3s ease;
+        display: inline-block;
+    }
+
+    .giant-link:hover .link-arrow {
+        opacity: 1;
+        transform: translate(20px, -20px);
+        color: var(--color-red);
+        -webkit-text-stroke: 0;
+    }
+
+    /* --- GRID DE INFORMACIÓN --- */
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    @media (min-width: 768px) {
+        .info-grid {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+    }
+
+    .info-col {
+        padding: 2rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    @media (min-width: 1024px) {
+        .info-col {
+            padding: 3rem 4rem;
+            min-height: 300px;
+        }
+    }
+
+    .col-header {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 2rem;
+        display: block;
+        opacity: 0.5;
+        border-bottom: 1px solid rgba(235, 233, 228, 0.1);
+        padding-bottom: 0.5rem;
+    }
+
+    .raw-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .raw-link {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        display: block;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .raw-link:hover {
+        color: var(--color-red);
+        padding-left: 1rem;
+        border-bottom: 1px solid var(--color-red);
+    }
+
+    .tech-specs p {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.8;
+    }
+
+    /* --- BOTTOM BAR --- */
+    .footer-bottom {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        background-color: var(--color-red);
+        color: var(--color-paper);
+    }
+    @media (min-width: 768px) {
+        .footer-bottom {
+            flex-direction: row;
+            padding: 1rem 4rem;
+        }
+    }
+
+    .location-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: bold;
+    }
+</style>

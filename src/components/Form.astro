@@ -1,0 +1,575 @@
+---
+// components/ContactSection.astro
+// Componente de formulario de contacto con envío funcional
+
+import { contactData } from "../data/contact";
+
+// Props interface
+interface Props {
+    class?: string;
+}
+
+const { class: className } = Astro.props;
+import gracias from "./Gracias.astro";
+---
+
+<!-- ============================================
+     CONTACT SECTION - Inquiry Form
+     ============================================ -->
+<section
+    id="contact"
+    class:list={["form-section", className]}
+    aria-labelledby="contact-title"
+>
+    <!-- Technical Badge -->
+    <div class="tech-badge" aria-hidden="true">
+        {contactData.badge}
+    </div>
+
+    <div class="layout-grid">
+        <!-- SIDEBAR: Vertical Text (Desktop Only) -->
+        <aside class="sidebar" aria-hidden="true">
+            <span class="vertical-text">{contactData.sidebarText}</span>
+        </aside>
+
+        <!-- CONTENT AREA: Form -->
+        <div class="content-area">
+            <!-- Form Header -->
+            <header class="form-header">
+                <h2 id="contact-title" class="headline">
+                    {contactData.title.main}
+                    <br />
+                    <span class="text-outline"
+                        >{contactData.title.outlined}</span
+                    >
+                </h2>
+            </header>
+
+            <!-- Contact Form -->
+            <form
+                class="form-body"
+                method="POST"
+                action={`https://formsubmit.co/${contactData.email}`}
+                id="contact-form"
+            >
+                <!-- FormSubmit Configuration (hidden fields) -->
+                <input
+                    type="hidden"
+                    name="_subject"
+                    value={contactData.emailSubject}
+                />
+                <input type="hidden" name="_template" value="box" />
+                <input type="hidden" name="_captcha" value="false" />
+                <input type="hidden" name="_next" value="/gracias" />
+
+                <!-- Row 1: Name + Email -->
+                <div class="field-row border-bottom">
+                    <!-- Name Field -->
+                    <div class="field-group border-right">
+                        <label for="name" class="field-label">
+                            <span class="text-red">01.</span> Nombre
+                        </label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="Nombre"
+                            placeholder="Tu Identidad"
+                            class="input-reset"
+                            required
+                            aria-required="true"
+                        />
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="field-group">
+                        <label for="email" class="field-label">
+                            <span class="text-red">02.</span> Email
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="Email"
+                            placeholder="contacto@red.com"
+                            class="input-reset"
+                            required
+                            aria-required="true"
+                        />
+                    </div>
+                </div>
+
+                <!-- Row 2: Service Selection -->
+                <div class="field-row border-bottom">
+                    <div class="field-group w-full">
+                        <label for="service" class="field-label">
+                            <span class="text-red">03.</span> Interés
+                        </label>
+                        <div class="select-wrapper">
+                            <select
+                                id="service"
+                                name="Servicio"
+                                class="input-reset select-reset"
+                                required
+                                aria-required="true"
+                            >
+                                <option value="" disabled selected
+                                    >Selecciona un servicio</option
+                                >
+                                {
+                                    contactData.services.map((service) => (
+                                        <option value={service}>
+                                            {service}
+                                        </option>
+                                    ))
+                                }
+                            </select>
+                            <span class="select-icon" aria-hidden="true">▼</span
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Message -->
+                <div class="field-row">
+                    <div class="field-group w-full h-auto">
+                        <label for="message" class="field-label">
+                            <span class="text-red">04.</span> Brief
+                        </label>
+                        <textarea
+                            id="message"
+                            name="Mensaje"
+                            rows="5"
+                            placeholder="Detalles de la misión..."
+                            class="input-reset textarea-reset"
+                            required
+                            aria-required="true"></textarea>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button
+                    type="submit"
+                    class="submit-btn"
+                    aria-label="Enviar formulario"
+                >
+                    <span class="btn-text">{contactData.submitButton.text}</span
+                    >
+                    <span class="btn-icon" aria-hidden="true"
+                        >{contactData.submitButton.icon}</span
+                    >
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Client-side Form Validation & Enhancement -->
+<script>
+    const form = document.getElementById("contact-form") as HTMLFormElement;
+
+    if (form) {
+        form.addEventListener("submit", function (e) {
+            const name = (
+                document.getElementById("name") as HTMLInputElement
+            ).value.trim();
+            const email = (
+                document.getElementById("email") as HTMLInputElement
+            ).value.trim();
+            const service = (
+                document.getElementById("service") as HTMLSelectElement
+            ).value;
+            const message = (
+                document.getElementById("message") as HTMLTextAreaElement
+            ).value.trim();
+
+            // Basic validation
+            if (!name || !email || !service || !message) {
+                e.preventDefault();
+                alert("Por favor completa todos los campos requeridos.");
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                e.preventDefault();
+                alert("Por favor ingresa un email válido.");
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = form.querySelector(
+                ".submit-btn",
+            ) as HTMLButtonElement;
+            const btnText = submitBtn.querySelector(
+                ".btn-text",
+            ) as HTMLSpanElement;
+            const originalText = btnText.textContent;
+
+            btnText.textContent = "Enviando...";
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.7";
+            submitBtn.style.cursor = "not-allowed";
+
+            // Form will submit normally to FormSubmit
+            console.log("Formulario enviado:", {
+                name,
+                email,
+                service,
+                message,
+            });
+        });
+
+        // Real-time validation feedback
+        const inputs = form.querySelectorAll(
+            "input[required], select[required], textarea[required]",
+        );
+        inputs.forEach((input) => {
+            input.addEventListener(
+                "blur",
+                function (
+                    this:
+                        | HTMLInputElement
+                        | HTMLSelectElement
+                        | HTMLTextAreaElement,
+                ) {
+                    if (!this.value.trim()) {
+                        this.style.borderBottom = "2px solid var(--color-red)";
+                    } else {
+                        this.style.borderBottom = "none";
+                    }
+                },
+            );
+
+            input.addEventListener(
+                "input",
+                function (
+                    this:
+                        | HTMLInputElement
+                        | HTMLSelectElement
+                        | HTMLTextAreaElement,
+                ) {
+                    if (this.style.borderBottom) {
+                        this.style.borderBottom = "none";
+                    }
+                },
+            );
+        });
+    }
+</script>
+
+<style>
+    /* ============================================
+     SECTION STRUCTURE
+     ============================================ */
+    .form-section {
+        background-color: var(--color-white);
+        border-bottom: var(--border-width) solid var(--color-ink);
+        position: relative;
+    }
+
+    /* Technical Badge - Top Right */
+    .tech-badge {
+        position: absolute;
+        inset: 0 0 auto auto;
+        padding: 0.5rem;
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        background-color: var(--color-ink);
+        color: var(--color-paper);
+        z-index: 10;
+        letter-spacing: 0.1em;
+    }
+
+    /* ============================================
+     LAYOUT GRID - Main Structure
+     ============================================ */
+    .layout-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 1024px) {
+        .layout-grid {
+            grid-template-columns: 1fr 11fr;
+        }
+    }
+
+    /* ============================================
+     SIDEBAR - Vertical Text (Desktop Only)
+     ============================================ */
+    .sidebar {
+        display: none;
+    }
+
+    @media (min-width: 1024px) {
+        .sidebar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: var(--border-width) solid var(--color-ink);
+            background-color: var(--color-paper);
+            padding-block: 3rem;
+        }
+    }
+
+    .vertical-text {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--color-red);
+    }
+
+    /* ============================================
+     FORM HEADER - Title Section
+     ============================================ */
+    .form-header {
+        padding: 2rem;
+        border-bottom: var(--border-width) solid var(--color-ink);
+    }
+
+    @media (min-width: 768px) {
+        .form-header {
+            padding: 3rem;
+        }
+    }
+
+    .headline {
+        font-family: var(--font-serif);
+        font-size: clamp(2.5rem, 8vw, 4.5rem);
+        line-height: 0.85;
+        text-transform: uppercase;
+        font-weight: normal;
+        margin: 0;
+    }
+
+    .text-outline {
+        -webkit-text-stroke: 1px var(--color-red);
+        color: transparent;
+        paint-order: stroke fill;
+    }
+
+    .text-red {
+        color: var(--color-red);
+    }
+
+    /* ============================================
+     FORM BODY - Input Fields
+     ============================================ */
+    .form-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .field-row {
+        display: flex;
+        flex-direction: column;
+    }
+
+    @media (min-width: 768px) {
+        .field-row {
+            flex-direction: row;
+        }
+    }
+
+    .border-bottom {
+        border-bottom: var(--border-width) solid var(--color-ink);
+    }
+
+    /* Field Group */
+    .field-group {
+        flex: 1;
+        padding: 1.5rem;
+        position: relative;
+        transition: background-color 0.3s ease;
+    }
+
+    .field-group:focus-within {
+        background-color: var(--color-paper);
+    }
+
+    .border-right {
+        border-right: none;
+        border-bottom: var(--border-width) solid var(--color-ink);
+    }
+
+    @media (min-width: 768px) {
+        .border-right {
+            border-right: var(--border-width) solid var(--color-ink);
+            border-bottom: none;
+        }
+    }
+
+    /* Field Label */
+    .field-label {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        margin-bottom: 1rem;
+        color: var(--color-ink);
+        opacity: 0.8;
+    }
+
+    /* ============================================
+     INPUT ELEMENTS - Brutalist Style
+     ============================================ */
+    .input-reset {
+        width: 100%;
+        background: transparent;
+        border: none;
+        font-family: var(--font-serif);
+        font-size: clamp(1.25rem, 2vw, 1.5rem);
+        color: var(--color-ink);
+        padding: 0;
+        outline: none;
+        border-radius: 0;
+        transition: border-bottom 0.3s ease;
+    }
+
+    .input-reset::placeholder {
+        color: var(--color-ink);
+        opacity: 0.2;
+        font-style: italic;
+    }
+
+    .input-reset:focus {
+        border-bottom: 2px solid var(--color-red);
+    }
+
+    /* Select Dropdown */
+    .select-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .select-reset {
+        appearance: none;
+        cursor: pointer;
+        padding-right: 2rem;
+    }
+
+    .select-icon {
+        position: absolute;
+        inset: 50% 0 auto auto;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: var(--color-red);
+        font-size: 0.875rem;
+    }
+
+    /* Textarea */
+    .textarea-reset {
+        resize: vertical;
+        min-height: 150px;
+        font-family: var(--font-serif);
+        line-height: 1.6;
+        background-image: repeating-linear-gradient(
+            transparent,
+            transparent 1.5rem,
+            rgba(18, 18, 18, 0.1) 1.5rem,
+            rgba(18, 18, 18, 0.1) calc(1.5rem + 1px)
+        );
+    }
+
+    /* ============================================
+     SUBMIT BUTTON - Call to Action
+     ============================================ */
+    .submit-btn {
+        width: 100%;
+        background: var(--color-ink);
+        color: var(--color-paper);
+        padding: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        border: none;
+        border-top: var(--border-width) solid var(--color-ink);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .submit-btn:hover:not(:disabled) {
+        background: var(--color-red);
+        padding-inline: 3rem;
+    }
+
+    .submit-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    .btn-text {
+        font-family: var(--font-mono);
+        font-size: clamp(0.875rem, 1.5vw, 1rem);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-weight: bold;
+    }
+
+    .btn-icon {
+        font-size: 2rem;
+        font-family: var(--font-serif);
+        transition: transform 0.3s ease;
+    }
+
+    .submit-btn:hover:not(:disabled) .btn-icon {
+        transform: translateX(10px);
+    }
+
+    /* ============================================
+     UTILITY CLASSES
+     ============================================ */
+    .w-full {
+        width: 100%;
+    }
+
+    .h-auto {
+        height: auto;
+    }
+
+    /* ============================================
+     ACCESSIBILITY - Focus & Validation
+     ============================================ */
+    .input-reset:focus-visible,
+    .select-reset:focus-visible,
+    .textarea-reset:focus-visible {
+        outline: 2px solid var(--color-red);
+        outline-offset: 2px;
+    }
+
+    /* Invalid state */
+    .input-reset:invalid:not(:placeholder-shown),
+    .select-reset:invalid:not(:placeholder-shown),
+    .textarea-reset:invalid:not(:placeholder-shown) {
+        border-bottom: 2px solid var(--color-red);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .field-group,
+        .submit-btn,
+        .btn-icon {
+            transition: none;
+        }
+    }
+
+    /* ============================================
+     MOBILE ADJUSTMENTS - < 768px
+     ============================================ */
+    @media (max-width: 767px) {
+        .form-header {
+            padding: 1.5rem;
+        }
+
+        .field-group {
+            padding: 1rem;
+        }
+
+        .submit-btn {
+            padding: 1.5rem 1rem;
+        }
+    }
+</style>

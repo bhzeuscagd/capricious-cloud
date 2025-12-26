@@ -1,131 +1,204 @@
 ---
+// components/AboutSection.astro
+// Componente de sección "Sobre Mí" con diseño editorial
 
+import { aboutData } from "../data/about";
+import type { AboutData } from "../data/about";
+
+// Props interface
+interface Props {
+    class?: string;
+    variant?: "default" | "technical" | "creative";
+}
+
+const { class: className, variant = "default" } = Astro.props;
+
+// Usar variante si se especifica (futuro)
+// const data: AboutData = variant !== 'default'
+//   ? aboutDataVariants[variant]
+//   : aboutData;
 ---
 
-<section id="about" class="container border-b">
+<!-- ============================================
+     ABOUT SECTION - Profile & Information
+     ============================================ -->
+<section
+    id="about"
+    class:list={["about-section", "container", "border-b", className]}
+    aria-labelledby="about-title"
+>
     <div class="about-grid">
-        <!-- Columna Visual (Izquierda) -->
-        <div class="col-visual border-r">
+        <!-- LEFT COLUMN: Visual & Title -->
+        <aside
+            class="col-visual border-r"
+            aria-label="Información visual del perfil"
+        >
             <div class="sticky-content">
-                <div class="font-serif about-title">
-                    <span class="label-profile">Perfil</span>
-                    Lógica <br /> & <span class="italic text-ink opacity-50"
-                        >Magia.</span
-                    >
+                <!-- Title -->
+                <div class="about-title font-serif">
+                    <span class="label-profile">{aboutData.title.label}</span>
+                    <h2 id="about-title">
+                        {aboutData.title.main}
+                        <br />
+                        {aboutData.title.conjunction}{" "}
+                        <span class="italic text-ink opacity-50"
+                            >{aboutData.title.subtitle}</span
+                        >
+                    </h2>
                 </div>
 
-                <!-- Imagen añadida para romper la simplicidad -->
-                <div class="image-frame">
-                    <div class="frame-deco"></div>
+                <!-- Profile Image -->
+                <figure class="image-frame">
+                    <div class="frame-deco" aria-hidden="true"></div>
                     <img
-                        src="https://images.unsplash.com/photo-1497215842964-222b4bef97ed?q=80&w=800&auto=format&fit=crop"
-                        alt="Workspace"
+                        src={aboutData.image.src}
+                        alt={aboutData.image.alt}
                         class="profile-img"
+                        loading="lazy"
                     />
-                    <div class="caption">
-                        <span>Fig. 04</span>
-                        <span>— Workspace</span>
-                    </div>
-                </div>
+                    <figcaption class="caption">
+                        <span>{aboutData.image.figure}</span>
+                        <span>— {aboutData.image.caption}</span>
+                    </figcaption>
+                </figure>
             </div>
-        </div>
+        </aside>
 
-        <!-- Columna de Contenido (Derecha) -->
-        <div class="col-content">
+        <!-- RIGHT COLUMN: Content -->
+        <article class="col-content">
+            <!-- Bio Text -->
             <div class="text-block">
-                <p class="mb-6 leading-relaxed">
-                    <span class="drop-cap">H</span>ola, soy Alex. Mi trabajo
-                    habita en la intersección exacta donde el código estricto se
-                    encuentra con el diseño expresivo. No veo diferencia entre
-                    escribir un componente en React y diseñar su interfaz en
-                    Figma; ambos son actos de arquitectura.
-                </p>
-                <p class="mb-6 leading-relaxed">
-                    Como usuario diario de <strong class="highlight"
-                        >CachyOS</strong
-                    > y Linux, valoro la eficiencia. Traslado esa filosofía a la web:
-                    sitios rápidos, accesibles y brutalmente honestos.
-                </p>
+                {
+                    aboutData.bio.map((paragraph) => (
+                        <p class="mb-6 leading-relaxed">
+                            {paragraph.hasDropCap && (
+                                <span class="drop-cap">H</span>
+                            )}
+                            <Fragment set:html={paragraph.text} />
+                        </p>
+                    ))
+                }
             </div>
 
-            <!-- Separador Editorial -->
-            <div class="divider">
+            <!-- Editorial Divider -->
+            <div class="divider" aria-hidden="true">
                 <span class="divider-icon">✽</span>
             </div>
 
-            <!-- Grid de Datos (Servicios + Stack) -->
+            <!-- Data Grid: Services + Tech Stack -->
             <div class="data-grid">
-                <!-- Servicios -->
+                <!-- Services Column -->
                 <div class="data-col border-r">
-                    <h4 class="data-header">/// Servicios</h4>
-                    <ul class="data-list">
-                        <li>UI/UX Design</li>
-                        <li>Design Systems</li>
-                        <li>Frontend Dev</li>
-                        <li>Creative Direction</li>
+                    <h3 class="data-header">/// Servicios</h3>
+                    <ul class="data-list" role="list">
+                        {
+                            aboutData.services.map((service) => (
+                                <li>{service}</li>
+                            ))
+                        }
                     </ul>
                 </div>
 
-                <!-- Tech Stack -->
+                <!-- Tech Stack Column -->
                 <div class="data-col">
-                    <h4 class="data-header">/// Arsenal</h4>
-                    <div class="tech-list">
-                        <span class="tech-item">React</span>
-                        <span class="tech-item highlight-box">Astro</span>
-                        <span class="tech-item">Tailwind</span>
-                        <span class="tech-item">TypeScript</span>
-                        <span class="tech-item figma">Figma</span>
-                        <span class="tech-item">Linux</span>
+                    <h3 class="data-header">/// Arsenal</h3>
+                    <div class="tech-list" role="list">
+                        {
+                            aboutData.techStack.map((tech) => (
+                                <span
+                                    class:list={[
+                                        "tech-item",
+                                        { "highlight-box": tech.highlighted },
+                                        { figma: tech.special },
+                                    ]}
+                                    role="listitem"
+                                >
+                                    {tech.name}
+                                </span>
+                            ))
+                        }
                     </div>
                 </div>
             </div>
 
-            <!-- Cita Final -->
-            <div class="quote-box">
-                <p>"La simplicidad es la máxima sofisticación."</p>
-                <span class="author">— Leonardo da Vinci</span>
-            </div>
-        </div>
+            <!-- Quote Box -->
+            <blockquote class="quote-box">
+                <p>"{aboutData.quote.text}"</p>
+                <cite class="author">— {aboutData.quote.author}</cite>
+            </blockquote>
+        </article>
     </div>
 </section>
 
 <style>
-    /* Grid Layout Principal */
+    /* ============================================
+     SECTION STRUCTURE
+     ============================================ */
+    .about-section {
+        width: 100%;
+    }
+
+    .border-b {
+        border-bottom: var(--border-width) solid var(--color-ink);
+    }
+
+    .border-r {
+        border-right: var(--border-width) solid var(--color-ink);
+    }
+
+    /* ============================================
+     ABOUT GRID - Main Layout
+     ============================================ */
     .about-grid {
         display: grid;
         grid-template-columns: 1fr;
     }
+
     @media (min-width: 1024px) {
         .about-grid {
-            grid-template-columns: 5fr 7fr; /* Más espacio para lo visual */
+            grid-template-columns: 5fr 7fr;
         }
     }
 
-    /* Columna Visual */
+    /* ============================================
+     VISUAL COLUMN - Left Side
+     ============================================ */
     .col-visual {
         padding: 3rem 2rem;
         background-color: var(--color-paper);
     }
+
     @media (min-width: 1024px) {
         .col-visual {
             padding: 6rem 4rem;
         }
+
         .sticky-content {
             position: sticky;
             top: 6rem;
         }
     }
 
-    /* Título */
+    @media (max-width: 1023px) {
+        .col-visual {
+            border-right: none;
+            border-bottom: var(--border-width) solid var(--color-ink);
+        }
+    }
+
+    /* ============================================
+     TITLE - Main Heading
+     ============================================ */
     .about-title {
-        font-size: 3.5rem;
+        font-size: clamp(3rem, 8vw, 5rem);
         line-height: 0.9;
         margin-bottom: 4rem;
     }
-    @media (min-width: 768px) {
-        .about-title {
-            font-size: 5rem;
-        }
+
+    .about-title h2 {
+        font-size: inherit;
+        font-weight: inherit;
+        margin: 0;
     }
 
     .label-profile {
@@ -140,36 +213,51 @@
         margin-bottom: 1rem;
         padding-bottom: 0.25rem;
     }
+
+    .italic {
+        font-style: italic;
+    }
+
+    .text-ink {
+        color: var(--color-ink);
+    }
+
     .opacity-50 {
         opacity: 0.5;
     }
 
-    /* Imagen */
+    /* ============================================
+     IMAGE FRAME - Profile Picture
+     ============================================ */
     .image-frame {
         position: relative;
-        margin-top: 2rem;
+        margin-block-start: 2rem;
         border: 1px solid var(--color-ink);
         padding: 0.5rem;
         background: var(--color-white);
+        margin: 0;
     }
+
     .frame-deco {
         position: absolute;
-        top: -10px;
-        right: -10px;
+        inset: -10px -10px auto auto;
         width: 100%;
         height: 100%;
         border: 1px solid var(--color-ink);
         z-index: 0;
         pointer-events: none;
     }
+
     .profile-img {
         width: 100%;
         height: auto;
+        display: block;
         filter: grayscale(100%);
-        transition: filter 0.5s;
+        transition: filter 0.5s ease;
         position: relative;
         z-index: 1;
     }
+
     .image-frame:hover .profile-img {
         filter: grayscale(0%);
     }
@@ -180,69 +268,89 @@
         text-transform: uppercase;
         display: flex;
         justify-content: space-between;
-        margin-top: 0.5rem;
+        margin-block-start: 0.5rem;
         border-top: 1px solid var(--color-ink);
-        padding-top: 0.5rem;
+        padding-block-start: 0.5rem;
     }
 
-    /* Columna Contenido */
+    /* ============================================
+     CONTENT COLUMN - Right Side
+     ============================================ */
     .col-content {
         background-color: var(--color-white);
     }
 
+    /* ============================================
+     TEXT BLOCK - Biography
+     ============================================ */
     .text-block {
         padding: 3rem 2rem;
         font-family: var(--font-sans);
-        font-size: 1.125rem;
+        font-size: clamp(1rem, 2vw, 1.125rem);
         line-height: 1.6;
         text-align: justify;
     }
+
     @media (min-width: 1024px) {
         .text-block {
             padding: 6rem 4rem;
         }
     }
 
-    /* Letra Capital */
+    .mb-6 {
+        margin-bottom: 1.5rem;
+    }
+
+    .leading-relaxed {
+        line-height: 1.75;
+    }
+
+    /* Drop cap - First letter */
     .drop-cap {
         float: left;
         font-family: var(--font-serif);
         font-size: 4rem;
         font-weight: bold;
         line-height: 0.8;
-        margin-right: 0.75rem;
-        margin-top: -0.25rem;
-    }
-    .highlight {
-        color: var(--color-white);
-        background: var(--color-red);
-        padding: 0 4px;
-    }
-    .mb-6 {
-        margin-bottom: 1.5rem;
+        margin-inline-end: 0.75rem;
+        margin-block-start: -0.25rem;
+        color: var(--color-ink);
     }
 
-    /* Separador */
+    /* Highlight text */
+    :global(.highlight) {
+        color: var(--color-white);
+        background: var(--color-red);
+        padding-inline: 4px;
+    }
+
+    /* ============================================
+     EDITORIAL DIVIDER
+     ============================================ */
     .divider {
         display: flex;
         align-items: center;
         justify-content: center;
         border-top: 1px solid var(--color-ink);
         border-bottom: 1px solid var(--color-ink);
-        padding: 1rem 0;
+        padding-block: 1rem;
         background: var(--color-paper);
     }
+
     .divider-icon {
         font-size: 1.5rem;
         color: var(--color-red);
     }
 
-    /* Grid de Datos */
+    /* ============================================
+     DATA GRID - Services & Tech Stack
+     ============================================ */
     .data-grid {
         display: grid;
         grid-template-columns: 1fr;
         border-bottom: 1px solid var(--color-ink);
     }
+
     @media (min-width: 768px) {
         .data-grid {
             grid-template-columns: 1fr 1fr;
@@ -252,27 +360,39 @@
     .data-col {
         padding: 2rem;
     }
+
+    @media (max-width: 767px) {
+        .data-col.border-r {
+            border-right: none;
+            border-bottom: 1px solid var(--color-ink);
+        }
+    }
+
     .data-header {
         font-family: var(--font-mono);
         text-transform: uppercase;
         font-size: 0.75rem;
         margin-bottom: 1.5rem;
         color: var(--color-red);
+        letter-spacing: 0.05em;
+        font-weight: normal;
     }
 
+    /* Services list */
     .data-list {
         list-style: none;
         font-family: var(--font-serif);
         font-size: 1.25rem;
         line-height: 1.8;
     }
+
     .data-list li::before {
         content: "— ";
         color: var(--color-ink);
         opacity: 0.3;
     }
 
-    /* Tech List */
+    /* Tech stack list */
     .tech-list {
         display: flex;
         flex-wrap: wrap;
@@ -280,41 +400,91 @@
         font-family: var(--font-mono);
         font-size: 0.75rem;
     }
+
     .tech-item {
         border: 1px solid var(--color-ink);
         padding: 0.25rem 0.5rem;
-        transition: 0.3s;
+        transition:
+            background-color 0.3s ease,
+            color 0.3s ease;
         cursor: default;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
+
     .tech-item:hover {
         background: var(--color-ink);
         color: var(--color-white);
     }
+
     .highlight-box {
         background: var(--color-ink);
         color: var(--color-white);
     }
+
     .figma {
         border-color: var(--color-red);
         color: var(--color-red);
     }
 
-    /* Quote Box */
+    .figma:hover {
+        background: var(--color-red);
+        color: var(--color-white);
+    }
+
+    /* ============================================
+     QUOTE BOX - Final Citation
+     ============================================ */
     .quote-box {
         padding: 4rem 2rem;
         text-align: center;
         font-family: var(--font-serif);
     }
+
     .quote-box p {
-        font-size: 2rem;
+        font-size: clamp(1.5rem, 3vw, 2rem);
         font-style: italic;
         margin-bottom: 1rem;
     }
+
     .author {
         font-family: var(--font-mono);
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.1em;
         opacity: 0.6;
+        font-style: normal;
+    }
+
+    /* ============================================
+     ACCESSIBILITY - Focus & Motion
+     ============================================ */
+    .image-frame:focus-within {
+        outline: 2px solid var(--color-red);
+        outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .profile-img,
+        .tech-item {
+            transition: none;
+        }
+    }
+
+    /* ============================================
+     MOBILE ADJUSTMENTS - < 768px
+     ============================================ */
+    @media (max-width: 767px) {
+        .text-block {
+            text-align: left;
+        }
+
+        .drop-cap {
+            font-size: 3rem;
+        }
+
+        .quote-box {
+            padding: 3rem 1.5rem;
+        }
     }
 </style>

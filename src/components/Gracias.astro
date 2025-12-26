@@ -1,0 +1,190 @@
+---
+// src/pages/gracias.astro
+// Página de confirmación después de enviar el formulario
+
+const pageTitle = "Mensaje Enviado";
+---
+
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{pageTitle} - Portfolio</title>
+        <style>
+            :root {
+                --color-white: #ffffff;
+                --color-paper: #ebe9e4;
+                --color-ink: #121212;
+                --color-red: #ff0000;
+                --font-serif: Georgia, "Times New Roman", serif;
+                --font-mono: "Courier New", monospace;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    sans-serif;
+                background-color: var(--color-paper);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .success-container {
+                max-width: 600px;
+                padding: 4rem 2rem;
+                text-align: center;
+            }
+
+            .status-badge {
+                display: inline-block;
+                padding: 0.5rem 1rem;
+                font-family: var(--font-mono);
+                font-size: 0.65rem;
+                background-color: var(--color-ink);
+                color: var(--color-paper);
+                letter-spacing: 0.1em;
+                margin-bottom: 2rem;
+            }
+
+            .success-icon {
+                font-size: 5rem;
+                color: var(--color-red);
+                margin-bottom: 2rem;
+                animation: checkmark 0.5s ease-in-out;
+            }
+
+            @keyframes checkmark {
+                0% {
+                    transform: scale(0) rotate(0deg);
+                    opacity: 0;
+                }
+                50% {
+                    transform: scale(1.2) rotate(180deg);
+                }
+                100% {
+                    transform: scale(1) rotate(360deg);
+                    opacity: 1;
+                }
+            }
+
+            h1 {
+                font-family: var(--font-serif);
+                font-size: clamp(2.5rem, 6vw, 4rem);
+                line-height: 1;
+                margin-bottom: 1rem;
+                color: var(--color-ink);
+            }
+
+            .highlight {
+                color: var(--color-red);
+                font-style: italic;
+            }
+
+            p {
+                font-size: 1.125rem;
+                line-height: 1.6;
+                color: rgba(18, 18, 18, 0.7);
+                margin-bottom: 3rem;
+            }
+
+            .back-button {
+                display: inline-flex;
+                align-items: center;
+                gap: 1rem;
+                padding: 1rem 2rem;
+                background: var(--color-ink);
+                color: var(--color-paper);
+                text-decoration: none;
+                font-family: var(--font-mono);
+                font-size: 0.875rem;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                transition: all 0.3s ease;
+                border: 1px solid var(--color-ink);
+            }
+
+            .back-button:hover {
+                background: var(--color-red);
+                border-color: var(--color-red);
+                transform: translateY(-2px);
+            }
+
+            .info-box {
+                margin-top: 3rem;
+                padding: 2rem;
+                background: var(--color-white);
+                border: 1px solid var(--color-ink);
+                text-align: left;
+            }
+
+            .info-title {
+                font-family: var(--font-mono);
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: var(--color-red);
+                margin-bottom: 1rem;
+            }
+
+            .info-list {
+                list-style: none;
+                font-family: var(--font-mono);
+                font-size: 0.875rem;
+                line-height: 1.8;
+            }
+
+            .info-list li::before {
+                content: "→ ";
+                color: var(--color-red);
+                margin-right: 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="success-container">
+            <span class="status-badge">TRANSMISSION_SUCCESS</span>
+
+            <div class="success-icon" aria-hidden="true">✓</div>
+
+            <h1>
+                Mensaje <span class="highlight">Recibido.</span>
+            </h1>
+
+            <p>
+                Gracias por contactar. Tu mensaje ha sido enviado exitosamente.
+                Responderé a la brevedad posible, generalmente dentro de 24-48
+                horas.
+            </p>
+
+            <a href="/" class="back-button">
+                <span>← Volver al Inicio</span>
+            </a>
+
+            <div class="info-box">
+                <p class="info-title">/// ¿Qué sigue?</p>
+                <ul class="info-list">
+                    <li>Revisaré tu mensaje cuidadosamente</li>
+                    <li>Te responderé al email proporcionado</li>
+                    <li>Coordinaremos una llamada si es necesario</li>
+                </ul>
+            </div>
+        </div>
+
+        <script>
+            // Auto-redirect después de 10 segundos (opcional)
+            // setTimeout(() => {
+            //   window.location.href = '/';
+            // }, 10000);
+        </script>
+    </body>
+</html>
