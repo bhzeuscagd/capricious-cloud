@@ -9,7 +9,7 @@ export const projects = [
     year: '2024',
     description: 'PWA para organizar y seguir series de anime con calendarios personalizados, registro de episodios y notificaciones push.',
     alt: 'Captura de pantalla de CronoAnime mostrando calendario de series',
-    image: '../public/images/projects/CronoSeries.webp',
+    image: '../images/projects/CronoSeries.webp',
     tagStyle: 'tag-red',
     
     // Links
@@ -35,7 +35,7 @@ export const projects = [
     year: '2024',
     description: 'Página web espacial construida con Astro, optimizada para rendimiento y SEO con diseño moderno y responsivo.',
     alt: 'Vista del proyecto Space con diseño espacial',
-    image: '../public/images/projects/space.webp',
+    image: '../images/projects/space.webp',
     tagStyle: 'tag-black',
     
     demoUrl: 'https://space-project.vercel.app',
@@ -58,7 +58,7 @@ export const projects = [
     year: '2024',
     description: 'Generador interactivo de boletos para conferencias con upload de fotos y previsualización en tiempo real.',
     alt: 'Interfaz del generador de tickets',
-    image: '../public/images/projects/tickets.webp',
+    image: '../images/projects/tickets.webp',
     tagStyle: 'tag-paper',
     
     demoUrl: 'https://conference-ticket-gen.vercel.app',
@@ -81,7 +81,7 @@ export const projects = [
     year: '2024',
     description: 'Sitio web minimalista construido con Astro, enfocado en performance y experiencia de usuario fluida.',
     alt: 'Diseño minimalista de Capricious Cloud',
-    image: '../public/images/projects/portfolio.webp',
+    image: '../images/projects/portfolio.webp',
     tagStyle: 'tag-black',
     
     demoUrl: 'https://capricious-cloud.vercel.app',
@@ -104,7 +104,7 @@ export const projects = [
     year: '2024',
     description: 'Componente de tarjeta de blog con HTML semántico y CSS moderno. Challenge de Frontend Mentor.',
     alt: 'Tarjeta de preview de blog',
-    image: '../public/images/projects/card.webp',
+    image: '../images/projects/card.webp',
     tagStyle: 'tag-paper',
     
     demoUrl: 'https://blog-preview-card.vercel.app',
