@@ -2,8 +2,7 @@
 
 > A modern, high-performance web portfolio built with [Astro](https://astro.build), featuring a distinct editorial design, responsive layout, and seamless interactions.
 
-![Portfolio Preview](INSERT_YOUR_SCREENSHOT_HERE)
-*Replace this text with a screenshot of your hero section*
+
 
 ## 📋 Overview
 
