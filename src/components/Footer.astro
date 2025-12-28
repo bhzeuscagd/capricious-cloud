@@ -1,84 +1,194 @@
 ---
+// components/Footer.astro
+// Footer principal con modals legales
 
+import { footerData } from '../data/footer';
+import PrivacyModal from '../modals/PrivacyModal.astro';
+import TermsModal from '../modals/TermsModal.astro';
+import LicenseModal from '../modals/LicenseModal.astro';
+
+interface Props {
+    class?: string;
+}
+
+const { class: className } = Astro.props;
 ---
 
-<footer class="footer-brutalist">
-    <!-- Grid Decorativo de Fondo -->
-    <div class="bg-grid-layer"></div>
+<footer class:list={['footer-brutalist', className]}>
+    <div class="bg-grid-layer" aria-hidden="true"></div>
 
     <div class="container-fluid">
-        <!-- Sección Superior: CTA Gigante -->
+        <!-- CTA Section -->
         <div class="cta-wrapper border-bottom">
             <div class="meta-row">
-                <span class="meta-label">/// Estado del Sistema</span>
+                <span class="meta-label">{footerData.statusBadge}</span>
                 <div class="status-indicator">
-                    <span class="blink-dot"></span>
-                    <span class="status-text">DISPONIBLE Q4</span>
+                    <span class="blink-dot" aria-hidden="true"></span>
+                    <span class="status-text">{footerData.statusText}</span>
                 </div>
             </div>
 
-            <a href="mailto:bhzemail@gmail.com" class="giant-link">
-                <span class="link-text">Hablemos</span>
-                <span class="link-arrow">↗</span>
+            <a href={footerData.ctaLink} class="giant-link">
+                <span class="link-text">{footerData.ctaText}</span>
+                <span class="link-arrow" aria-hidden="true">↗</span>
             </a>
         </div>
 
-        <!-- Sección Media: Grid de Datos -->
+        <!-- Info Grid -->
         <div class="info-grid border-bottom">
-            <!-- Columna 1: Redes -->
+            <!-- Social Links Column -->
             <div class="info-col border-right">
                 <span class="col-header">[01] Redes</span>
-                <ul class="raw-list">
-                    <li><a href="#" class="raw-link">Instagram -></a></li>
-                    <li><a href="#" class="raw-link">Twitter / X -></a></li>
-                    <li><a href="#" class="raw-link">LinkedIn -></a></li>
-                    <li><a href="#" class="raw-link">GitHub -></a></li>
+                <ul class="raw-list" role="list">
+                    {footerData.socialLinks.map((social) => (
+                        <li>
+                            <a href={social.url} class="raw-link" target="_blank" rel="noopener noreferrer">
+                                {social.icon === 'instagram' && (
+                                    <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                    </svg>
+                                )}
+                                {social.icon === 'twitter' && (
+                                    <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+                                        <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+                                    </svg>
+                                )}
+                                {social.icon === 'linkedin' && (
+                                    <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                        <rect x="2" y="9" width="4" height="12"></rect>
+                                        <circle cx="4" cy="4" r="2"></circle>
+                                    </svg>
+                                )}
+                                {social.icon === 'github' && (
+                                    <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                                    </svg>
+                                )}
+                                <span>{social.name} -></span>
+                            </a>
+                        </li>
+                    ))}
                 </ul>
             </div>
 
-            <!-- Columna 2: Legal -->
+            <!-- Legal Column -->
             <div class="info-col border-right">
                 <span class="col-header">[02] Legal</span>
-                <ul class="raw-list">
+                <ul class="raw-list" role="list">
                     <li>
-                        <a href="#" class="raw-link">Política de Privacidad</a>
+                        <button class="raw-link" data-modal="privacy">
+                            Política de Privacidad
+                        </button>
                     </li>
-                    <li><a href="#" class="raw-link">Términos de Uso</a></li>
-                    <li><a href="#" class="raw-link">Licencia MIT</a></li>
+                    <li>
+                        <button class="raw-link" data-modal="terms">
+                            Términos de Uso
+                        </button>
+                    </li>
+                    <li>
+                        <button class="raw-link" data-modal="license">
+                            Licencia MIT
+                        </button>
+                    </li>
                 </ul>
             </div>
 
-            <!-- Columna 3: Tech Specs -->
+            <!-- Specs Column -->
             <div class="info-col">
                 <span class="col-header">[03] Especificaciones</span>
                 <div class="tech-specs">
-                    <p>Build: v.2.4.0</p>
-                    <p>OS: CachyOS / Arch</p>
-                    <p>Font: DM Serif / Mono</p>
-                    <p>Timezone: GMT-5</p>
+                    {footerData.techSpecs.map((spec) => (
+                        <p>{spec.label}: {spec.value}</p>
+                    ))}
                 </div>
             </div>
         </div>
 
-        <!-- Sección Inferior: Copyright & Location -->
+        <!-- Footer Bottom -->
         <div class="footer-bottom">
-            <span class="copyright">© 2025 CAGD</span>
+            <span class="copyright">{footerData.copyright}</span>
             <div class="location-badge">
-                BUCARAMANGA, COL
-                <i class="ph ph-map-pin"></i>
+                {footerData.location}
+                <svg class="link-icon" style="width:14px; height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
             </div>
         </div>
     </div>
 </footer>
 
+<!-- Import Modals -->
+<PrivacyModal />
+<TermsModal />
+<LicenseModal />
+
+<!-- Modal Management Script -->
+<script>
+    // Modal Management
+    const modalTriggers = document.querySelectorAll('[data-modal]');
+    const modals = document.querySelectorAll('.legal-modal');
+    
+    // Open modal
+    modalTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const modalId = `modal-${trigger.getAttribute('data-modal')}`;
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                modal.setAttribute('aria-hidden', 'false');
+            }
+        });
+    });
+
+    // Close modal function
+    function closeModal(modal: Element) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        modal.setAttribute('aria-hidden', 'true');
+    }
+
+    // Close modal handlers
+    modals.forEach(modal => {
+        const closeBtn = modal.querySelector('.modal-close');
+        const overlay = modal.querySelector('.modal-overlay');
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => closeModal(modal));
+        }
+        
+        if (overlay) {
+            overlay.addEventListener('click', () => closeModal(modal));
+        }
+    });
+
+    // Close with ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const activeModal = document.querySelector('.legal-modal.active');
+            if (activeModal) {
+                closeModal(activeModal);
+            }
+        }
+    });
+</script>
+
 <style>
-    /* Estructura Base */
+    /* ============================================
+       FOOTER STRUCTURE
+       ============================================ */
     .footer-brutalist {
         background-color: var(--color-ink);
         color: var(--color-paper);
         position: relative;
         overflow: hidden;
         border-top: var(--border-width) solid var(--color-ink);
+        width: 100%;
     }
 
     .container-fluid {
@@ -88,13 +198,10 @@
         z-index: 10;
     }
 
-    /* Fondo Decorativo */
+    /* Background Grid */
     .bg-grid-layer {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        inset: 0;
         opacity: 0.1;
         pointer-events: none;
         background-size: 40px 40px;
@@ -103,23 +210,28 @@
             linear-gradient(to bottom, var(--color-paper) 1px, transparent 1px);
     }
 
-    /* Utilidades de Bordes (adaptadas al contexto oscuro) */
+    /* Border Utilities */
     .border-bottom {
         border-bottom: 1px solid rgba(235, 233, 228, 0.2);
     }
+
     .border-right {
         border-right: none;
     }
+
     @media (min-width: 768px) {
         .border-right {
             border-right: 1px solid rgba(235, 233, 228, 0.2);
         }
     }
 
-    /* --- CTA GIGANTE --- */
+    /* ============================================
+       CTA SECTION
+       ============================================ */
     .cta-wrapper {
         padding: 3rem 1.5rem;
     }
+
     @media (min-width: 1024px) {
         .cta-wrapper {
             padding: 6rem 4rem;
@@ -154,10 +266,9 @@
         border-radius: 50%;
         animation: blink 1s infinite;
     }
+
     @keyframes blink {
-        50% {
-            opacity: 0;
-        }
+        50% { opacity: 0; }
     }
 
     .giant-link {
@@ -180,9 +291,7 @@
         font-size: 0.3em;
         vertical-align: top;
         opacity: 0;
-        transition:
-            opacity 0.3s ease,
-            transform 0.3s ease;
+        transition: opacity 0.3s ease, transform 0.3s ease;
         display: inline-block;
     }
 
@@ -193,11 +302,14 @@
         -webkit-text-stroke: 0;
     }
 
-    /* --- GRID DE INFORMACIÓN --- */
+    /* ============================================
+       INFO GRID
+       ============================================ */
     .info-grid {
         display: grid;
         grid-template-columns: 1fr;
     }
+
     @media (min-width: 768px) {
         .info-grid {
             grid-template-columns: 1fr 1fr 1fr;
@@ -210,6 +322,7 @@
         flex-direction: column;
         justify-content: flex-start;
     }
+
     @media (min-width: 1024px) {
         .info-col {
             padding: 3rem 4rem;
@@ -235,20 +348,38 @@
         margin: 0;
     }
 
+    /* Links & Buttons */
     .raw-link {
         font-family: var(--font-mono);
         font-size: 0.85rem;
         text-transform: uppercase;
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
         padding: 0.5rem 0;
         border-bottom: 1px solid transparent;
-        transition: all 0.3s;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+        background: none;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        width: 100%;
+        text-align: left;
+    }
+
+    .link-icon {
+        width: 1.2em;
+        height: 1.2em;
+        flex-shrink: 0;
     }
 
     .raw-link:hover {
         color: var(--color-red);
         padding-left: 1rem;
-        border-bottom: 1px solid var(--color-red);
+        border-bottom-color: var(--color-red);
     }
 
     .tech-specs p {
@@ -258,13 +389,16 @@
         opacity: 0.8;
     }
 
-    /* --- BOTTOM BAR --- */
+    /* ============================================
+       FOOTER BOTTOM
+       ============================================ */
     .footer-bottom {
         padding: 1.5rem;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
+        gap: 1rem;
         font-family: var(--font-mono);
         font-size: 0.65rem;
         text-transform: uppercase;
@@ -272,6 +406,7 @@
         background-color: var(--color-red);
         color: var(--color-paper);
     }
+
     @media (min-width: 768px) {
         .footer-bottom {
             flex-direction: row;
@@ -284,5 +419,32 @@
         align-items: center;
         gap: 0.5rem;
         font-weight: bold;
+    }
+
+    /* ============================================
+       ACCESSIBILITY
+       ============================================ */
+    @media (prefers-reduced-motion: reduce) {
+        .giant-link,
+        .link-arrow,
+        .raw-link,
+        .blink-dot {
+            transition: none;
+            animation: none;
+        }
+    }
+
+    /* ============================================
+       MOBILE ADJUSTMENTS
+       ============================================ */
+    @media (max-width: 767px) {
+        .info-col {
+            border-right: none;
+            border-bottom: 1px solid rgba(235, 233, 228, 0.2);
+        }
+
+        .info-col:last-child {
+            border-bottom: none;
+        }
     }
 </style>

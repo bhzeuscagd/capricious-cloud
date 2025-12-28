@@ -1,5 +1,5 @@
 // src/data/about.ts
-// Datos de la sección "Sobre Mí"
+// Datos de la sección "Sobre Mí" - Versión Full Stack / Product Designer
 
 export interface AboutTitle {
   label: string;
@@ -22,8 +22,8 @@ export interface BioParagraph {
 
 export interface TechItem {
   name: string;
-  highlighted: boolean;
-  special: boolean;
+  highlighted: boolean; // Para destacar tu tecnología principal (Astro)
+  special: boolean;     // Para destacar herramientas de diseño (Figma)
 }
 
 export interface Quote {
@@ -45,10 +45,10 @@ export interface AboutData {
 // ============================================
 
 export const aboutData: AboutData = {
-  // Título principal de la sección
+  // Título: Refleja el equilibrio entre Código (Frontend/Back) y Visual (UI)
   title: {
     label: 'Perfil',
-    main: 'Lógica',
+    main: 'Logica',
     conjunction: '&',
     subtitle: 'Magia.'
   },
@@ -56,78 +56,80 @@ export const aboutData: AboutData = {
   // Imagen de perfil
   image: {
     src: 'https://avatars.githubusercontent.com/u/222774338?s=400&u=6fc80ab46aa948d0bd080a3f5a1dfba21d1ae42a&v=4',
-    alt: 'Espacio de trabajo creativo y minimalista',
-    figure: 'Fig. 04',
-    caption: 'Workspace'
+    alt: 'Setup de desarrollo minimalista con Linux',
+    figure: 'Fig. 01',
+    caption: 'Dev Environment'
   },
 
-  // Biografía (párrafos)
+  // Biografía: Aquí unimos todas tus habilidades en una narrativa coherente
   bio: [
     {
-      text: 'Hola, soy Andrés. Mi trabajo habita en la intersección exacta donde el código estricto se encuentra con el diseño expresivo. No veo diferencia entre escribir un componente en React y diseñar su interfaz en Figma; ambos son actos de arquitectura.',
-      hasDropCap: true // Letra capital en el primer párrafo
+      text: 'Hola, soy Celso. Desarrollo soluciones web completas, entendiendo que una web profesional nace en el diseño y vive en el servidor. Mi flujo de trabajo conecta la creatividad de <strong>Figma</strong> con la lógica robusta de <strong>PHP</strong> y bases de datos.',
+      hasDropCap: true
     },
     {
-      text: 'Como usuario diario de <strong class="highlight">CachyOS</strong> y Linux, valoro la eficiencia. Traslado esa filosofía a la web: sitios rápidos, accesibles y brutalmente honestos.',
+      text: 'Me especializo en construir interfaces modernas y rápidas usando <strong class="highlight">Astro</strong> y React. No solo maqueto; arquitecto la experiencia completa para que sea visualmente impactante y técnicamente escalable.',
       hasDropCap: false
     }
   ],
 
-  // Lista de servicios
+  // Lista de servicios: Cubre todo lo que pediste
   services: [
-    'UI/UX Design',
-    'Design Systems',
-    'Frontend Dev',
-    'Creative Direction'
+    'Web Development',    // Engloba todo
+    'UI/UX Design',       // Figma
+    'Database Arch',      // SQL/DB
+    'Full Stack Logic'    // PHP + JS
   ],
 
-  // Stack tecnológico
+  // Stack tecnológico: Lo más importante primero
   techStack: [
-    { name: 'React', highlighted: false, special: false },
-    { name: 'Astro', highlighted: true, special: false }, // highlighted = fondo negro
-    { name: 'Tailwind', highlighted: false, special: false },
-    { name: 'TypeScript', highlighted: false, special: false },
-    { name: 'Figma', highlighted: false, special: true }, // special = borde rojo
-    { name: 'Linux', highlighted: false, special: false }
+    { name: 'Astro', highlighted: true, special: false },   // Tu fuerte actual
+    { name: 'React', highlighted: false, special: false },  // Estándar de industria
+    { name: 'Figma', highlighted: false, special: true },   // Tu lado de diseño (borde rojo)
+    { name: 'PHP', highlighted: false, special: false },    // Backend clásico/robusto
+    { name: 'SQL', highlighted: false, special: false },    // Bases de datos
+    { name: 'Linux', highlighted: false, special: false }   // Tu sistema base
   ],
 
-  // Cita final
+  // Cita: Enfocada en la funcionalidad (Steve Jobs es un clásico para esto)
   quote: {
-    text: 'La simplicidad es la máxima sofisticación.',
-    author: 'Leonardo da Vinci'
+    text: 'El diseño no es solo cómo se ve y cómo se siente. El diseño es cómo funciona.',
+    author: 'Steve Jobs'
   }
 };
 
 // ============================================
-// VARIANTES OPCIONALES - Para A/B Testing
+// VARIANTES OPCIONALES - Estrategia
 // ============================================
 
 export const aboutDataVariants = {
-  // Versión más técnica
+  // Versión "Ingeniero": Enfatiza PHP, Datos y Rendimiento
   technical: {
     ...aboutData,
+    title: { label: 'Rol', main: 'System', conjunction: '&', subtitle: 'Web.' },
     bio: [
       {
-        text: 'Desarrollador full-stack con enfoque en arquitectura frontend. Especializado en crear sistemas de diseño escalables y componentes reutilizables que funcionan en producción.',
+        text: 'Desarrollador web enfocado en rendimiento y estructura de datos. Combino la velocidad del frontend moderno con la estabilidad de gestores de base de datos relacionales.',
         hasDropCap: true
       },
       {
-        text: 'Mi stack principal incluye <strong class="highlight">React</strong>, TypeScript y Tailwind. Creo en el código limpio, la documentación exhaustiva y las pruebas automatizadas.',
+        text: 'Desde consultas <strong>SQL</strong> optimizadas hasta hidratación parcial en <strong class="highlight">Astro</strong>. Mi objetivo es crear aplicaciones web seguras, rápidas y fáciles de mantener.',
         hasDropCap: false
       }
     ]
   },
 
-  // Versión más creativa
+  // Versión "Visual": Enfatiza Figma, UI y UX
   creative: {
     ...aboutData,
+    title: { label: 'Rol', main: 'Pixel', conjunction: '&', subtitle: 'Code.' },
     bio: [
       {
-        text: 'Diseñador que programa y programador que diseña. Me fascina el punto donde la estética se encuentra con la funcionalidad, donde cada píxel tiene un propósito y cada línea de código cuenta una historia.',
+        text: 'Transformo prototipos de Figma en código vivo. Mi proceso borra la línea entre diseñador y desarrollador, asegurando que la visión visual llegue intacta al navegador.',
         hasDropCap: true
       },
       {
-        text: 'Inspirado por el diseño suizo, el brutalismo digital y la filosofía <strong class="highlight">UNIX</strong>. Creo interfaces que respiran, sistemas que escalan y experiencias que perduran.',
+        text: 'Creo interfaces responsivas y accesibles. Uso la tecnología no como un fin, sino como una herramienta para contar historias visuales a través de la web.',
         hasDropCap: false
       }
     ]
@@ -135,33 +137,21 @@ export const aboutDataVariants = {
 };
 
 // ============================================
-// HELPERS - Funciones Auxiliares
+// HELPERS - Funciones Auxiliares (Sin cambios)
 // ============================================
 
-/**
- * Obtiene los items del tech stack destacados
- */
 export function getFeaturedTech(): TechItem[] {
   return aboutData.techStack.filter(tech => tech.highlighted || tech.special);
 }
 
-/**
- * Cuenta total de tecnologías
- */
 export function getTechCount(): number {
   return aboutData.techStack.length;
 }
 
-/**
- * Obtiene servicios como string separado por comas
- */
 export function getServicesString(): string {
   return aboutData.services.join(', ');
 }
 
-/**
- * Obtiene bio completa como texto plano (sin HTML)
- */
 export function getPlainBio(): string {
   return aboutData.bio
     .map(p => p.text.replace(/<[^>]*>/g, ''))
